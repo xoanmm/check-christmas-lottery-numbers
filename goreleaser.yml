@@ -1,0 +1,45 @@
+project_name: check-christmas-lottery-numbers
+builds:
+  - id: check-christmas-lottery-numbers
+    binary: check-christmas-lottery-numbers
+    main: cmd/main.go
+    env:
+      - GO111MODULE=on
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+
+changelog:
+  sort: desc
+
+archives:
+  - format_overrides:
+      - goos: windows
+        format: zip
+    replacements:
+      amd64: 64-bit
+      darwin: macOS
+
+before:
+  hooks:
+    - go mod tidy
+
+release:
+  github:
+    owner: xoanmm
+    name: check-christmas-lottery-numbers
+
+nfpms:
+  - id: check-christmas-lottery-numbers
+    builds:
+      - check-christmas-lottery-numbers
+    formats:
+      - deb
+    vendor: Xoán Mallón
+    homepage: https://github.com/xoanmm/check-christmas-lottery-numbers
+    maintainer: xoanmmm <xoanmallon@gmail.com>
+    description: CLI that checks the lottery numbers provided through a file and notifies those that have been awarded using pushOver

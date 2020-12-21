@@ -1,0 +1,26 @@
+{
+  "name": "check-christmas-lottery-numbers",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xoanmm/check-christmas-lottery-numbers.git"
+  },
+  "dependencies": {
+    "@semantic-release/exec": "5.0.0",
+    "semantic-release": "17.2.2"
+  },
+  "release": {
+    "branches": [
+      "main"
+    ],
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      [
+        "@semantic-release/exec",
+        {
+          "verifyReleaseCmd": "echo ${nextRelease.version} > release_version.txt"
+        }
+      ]
+    ]
+  }
+}
