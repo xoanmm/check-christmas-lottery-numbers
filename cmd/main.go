@@ -42,7 +42,7 @@ func buildCLI() *cli.App {
 			&cli.StringFlag{
 				Name:    "file-numbers-to-check",
 				Usage:   "JSON file with numbers to check",
-				Value:   "",
+				Value:   "/tmp/numbers_to_check.json",
 				Aliases: []string{"f"},
 			},
 			&cli.BoolFlag{

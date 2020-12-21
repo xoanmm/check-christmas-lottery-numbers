@@ -114,7 +114,7 @@ The following are different examples of execution:
       help, h  Shows a list of commands or help for one command
     
     GLOBAL OPTIONS:
-      --file-numbers-to-check value, -f value  JSON file with numbers to check
+      --file-numbers-to-check value, -f value  JSON file with numbers to check (default: "/tmp/numbers_to_check.json")
       --notify, -n                             Activate notifications through PushOver (default: false)
       --help, -h                               show help (default: false)
 
