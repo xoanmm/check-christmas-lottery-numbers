@@ -46,7 +46,7 @@ func TestGetAPILotteryDrawStatusIncorrectUrlForJSONUnmarshall(t *testing.T) {
 func TestGetAPILotteryDrawStatusIncorrectUrlForRequest(t *testing.T) {
 	inCorrectLotteryDrawResultsAPIURLForRequest := "http:/api.elpais.com/ws/LoteriaNavidadPremiadoss"
 	_, err := GetAPILotteryDrawStatus(inCorrectLotteryDrawResultsAPIURLForRequest)
-	inCorrectLotteryDrawResultsAPIURLForRequestInRequest :=  "http:///api.elpais.com/ws/LoteriaNavidadPremiadoss"
+	inCorrectLotteryDrawResultsAPIURLForRequestInRequest := "http:///api.elpais.com/ws/LoteriaNavidadPremiadoss"
 	expectedError := fmt.Errorf(
 		"Get \"%s?s=1\": http: no Host in request URL",
 		inCorrectLotteryDrawResultsAPIURLForRequestInRequest,
@@ -57,7 +57,7 @@ func TestGetAPILotteryDrawStatusIncorrectUrlForRequest(t *testing.T) {
 }
 
 func TestCheckAPILOtteryDrawStatusDrawNotStarted(t *testing.T) {
-	_ , err := CheckAPILOtteryDrawStatus(0)
+	_, err := CheckAPILOtteryDrawStatus(0)
 
 	expectedError := errors.New("the draw has not started yet, it is not possible to get the results for the numbers")
 	if err.Error() != expectedError.Error() {
@@ -66,7 +66,7 @@ func TestCheckAPILOtteryDrawStatusDrawNotStarted(t *testing.T) {
 }
 
 func TestCheckAPILOtteryDrawStatusDrawStartedWithoutAllNumbers(t *testing.T) {
-	message , _ := CheckAPILOtteryDrawStatus(1)
+	message, _ := CheckAPILOtteryDrawStatus(1)
 
 	expectedMessage := "The draw has started but not all the numbers are in the list"
 
@@ -76,7 +76,7 @@ func TestCheckAPILOtteryDrawStatusDrawStartedWithoutAllNumbers(t *testing.T) {
 }
 
 func TestCheckAPILOtteryDrawStatusDrawFinishedWithProvisionalNumbers(t *testing.T) {
-	message , _ := CheckAPILOtteryDrawStatus(2)
+	message, _ := CheckAPILOtteryDrawStatus(2)
 
 	expectedMessage := "The draw has ended but the list of numbers is provisional"
 
@@ -86,7 +86,7 @@ func TestCheckAPILOtteryDrawStatusDrawFinishedWithProvisionalNumbers(t *testing.
 }
 
 func TestCheckAPILOtteryDrawStatusDrawFinishedWithSemiofficialNumbers(t *testing.T) {
-	message , _ := CheckAPILOtteryDrawStatus(3)
+	message, _ := CheckAPILOtteryDrawStatus(3)
 
 	expectedMessage := "The draw is over but the list of numbers is semi-official"
 
@@ -96,7 +96,7 @@ func TestCheckAPILOtteryDrawStatusDrawFinishedWithSemiofficialNumbers(t *testing
 }
 
 func TestCheckAPILOtteryDrawStatusDrawFinishedWithOfficialNumbers(t *testing.T) {
-	message , _ := CheckAPILOtteryDrawStatus(4)
+	message, _ := CheckAPILOtteryDrawStatus(4)
 
 	expectedMessage := "The draw is over and the list of numbers is official"
 
@@ -106,7 +106,7 @@ func TestCheckAPILOtteryDrawStatusDrawFinishedWithOfficialNumbers(t *testing.T) 
 }
 
 func TestCheckAPILOtteryDrawStatusDrawFinishedWithUnknownCode(t *testing.T) {
-	_ , err := CheckAPILOtteryDrawStatus(5)
+	_, err := CheckAPILOtteryDrawStatus(5)
 
 	expectedError := errors.New("code obtained for draw status is unknown")
 	if err.Error() != expectedError.Error() {

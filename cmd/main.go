@@ -12,6 +12,7 @@ import (
 // lotteryDrawResultsAPIURL represents the URL of the API where the results of the
 // Christmas draw will be obtained
 const lotteryDrawResultsAPIURL = "http://api.elpais.com/ws/LoteriaNavidadPremiados"
+
 var date = time.Now().Format(time.RFC3339)
 
 func main() {
@@ -26,10 +27,10 @@ func buildCLI() *cli.App {
 	d, _ := time.Parse(time.RFC3339, date)
 
 	return &cli.App{
-		Name:     "check-christmas-lottery-numbers",
-		Usage:    "Interacts with the Christmas lottery API to obtain the results " +
+		Name: "check-christmas-lottery-numbers",
+		Usage: "Interacts with the Christmas lottery API to obtain the results " +
 			"of the numbers provided and send notifications with PushOver if you win a prize",
-		Compiled: d,
+		Compiled:  d,
 		UsageText: "check-lottery-results --file-numbers-to-check <file-numbers-to-check> [-n]",
 		Authors: []*cli.Author{
 			{

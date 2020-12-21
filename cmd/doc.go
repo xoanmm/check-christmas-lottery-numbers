@@ -15,5 +15,5 @@ GLOBAL OPTIONS:
    --file-numbers-to-check value, -f value  JSON file with numbers to check
    --notify, -n                             Activate notifications through PushOver (default: false)
    --help, -h                               show help (default: false)
- */
+*/
 package main

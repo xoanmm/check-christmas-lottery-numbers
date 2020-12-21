@@ -11,10 +11,9 @@ import (
 
 const pushOverURL = "https://api.pushover.net/1/messages.json"
 
-
 // GetNecessaryNotificationParams checks if all the necessary
 // params are set in the system for make calls to pushOver
-func getNecessaryNotificationParams() (*string, *string, error){
+func getNecessaryNotificationParams() (*string, *string, error) {
 	pushOverNotificationToken := os.Getenv("PUSH_OVER_NOTIFICATION_TOKEN")
 	pushOverNotificationUser := os.Getenv("PUSH_OVER_NOTIFICATION_USER")
 

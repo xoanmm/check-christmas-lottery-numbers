@@ -13,15 +13,19 @@ import (
 // codeDrawNotStartedYet represents the code returned by the Christmas lottery
 // API when the draw has not started
 const codeDrawNotStartedYet = 0
+
 // codeDrawStartedWithoutAllNumbers represents the code returned by the Christmas lottery
 // API when the draw has started but all the numbers have not been published yet
 const codeDrawStartedWithoutAllNumbers = 1
+
 // codeDrawEndWithProvisionalNumbers represents the code returned by the Christmas lottery
 // API when the draw has started but the list of numbers is provisional
 const codeDrawEndWithProvisionalNumbers = 2
+
 // codeDrawEndWithSemiofficialNumbers represents the code returned by the Christmas lottery
 // API when the draw has started but the list of numbers is semi-official
 const codeDrawEndWithSemiofficialNumbers = 3
+
 // codeDrawEndWithOfficialNumbers represents the code returned by the Christmas lottery
 // API when the draw has started but the list of numbers is official
 const codeDrawEndWithOfficialNumbers = 4
@@ -108,7 +112,7 @@ func CheckNumber(lotteryDrawResultsAPIURL string, number int, bet int, origin st
 }
 
 // isNecessaryNotify check if is necessary notify for each number result
-func isNecessaryNotify(finalPrize int, notify bool) bool{
+func isNecessaryNotify(finalPrize int, notify bool) bool {
 	if finalPrize > 0 && notify {
 		return true
 	}
@@ -132,7 +136,7 @@ func CheckPersonsNumbers(lotteryDrawResultsAPIURL string, personsNumbersToCheck 
 
 	personsNumbersToCheckNum := len(personsNumbersToCheck.PersonsNumbers)
 	log.Printf("Numbers are going to be check from %d different owners\n", personsNumbersToCheckNum)
-	for i:= 0; i < personsNumbersToCheckNum; i++ {
+	for i := 0; i < personsNumbersToCheckNum; i++ {
 		personNumbersToCheck := personsNumbersToCheck.PersonsNumbers[i]
 		personNumbersToCheckNum := len(personNumbersToCheck.Numbers)
 

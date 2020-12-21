@@ -8,7 +8,7 @@ import (
 )
 
 // OpenFilePersonsNumbersToCheck open the file where the numbers to check for the persons are stored
-func OpenFilePersonsNumbersToCheck(fileNumbersToCheck string) (*PersonNumbersToCheck, error){
+func OpenFilePersonsNumbersToCheck(fileNumbersToCheck string) (*PersonNumbersToCheck, error) {
 	log.Printf("Opening file %s with numbers to check\n", fileNumbersToCheck)
 	jsonFile, err := os.Open(fileNumbersToCheck)
 

@@ -11,16 +11,15 @@ type Number struct {
 // PersonNumbers struct which contains information
 // about the numbers to check for a specific Person
 type PersonNumbers struct {
-	Numbers	[]Number `json:"numbers"`
-	Owner string `json:"owner"`
+	Numbers []Number `json:"numbers"`
+	Owner   string   `json:"owner"`
 }
 
 // PersonNumbersToCheck struct which contains information
 // about the numbers to check for a specific Person
 type PersonNumbersToCheck struct {
-	PersonsNumbers	[]PersonNumbers `json:"numbers_to_check"`
+	PersonsNumbers []PersonNumbers `json:"numbers_to_check"`
 }
-
 
 // Result struct which contain information about
 // each lottery number result obtained from API
@@ -34,7 +33,7 @@ type Result struct {
 
 // NewResult allows to create a Result type struct providing all the information for it
 func NewResult(numero int, premio int, timestamp int, status int, error int) *Result {
-	return &Result{numero,  premio, timestamp, status, error}
+	return &Result{numero, premio, timestamp, status, error}
 }
 
 // LotteryDrawStatus which contain information about

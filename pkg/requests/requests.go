@@ -25,7 +25,7 @@ func DoGetRequest(url string) (*string, error) {
 }
 
 // DoPostRequestWithBody makes a POST Request with body to a specific URL
-func DoPostRequestWithBody (URL string, body []byte) ([]byte, error) {
+func DoPostRequestWithBody(URL string, body []byte) ([]byte, error) {
 	req, err := http.NewRequest("POST", URL, bytes.NewBuffer(body))
 	if err != nil {
 		return nil, err
