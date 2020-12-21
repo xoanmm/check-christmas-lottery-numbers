@@ -155,7 +155,7 @@ func checkPersonNumbers(lotteryDrawResultsAPIURL string, personNumbersToCheck Pe
 	owner := personNumbersToCheck.Owner
 	probabilityOfWin := getProbabilityOfWin(personNumbersToCheckNum)
 
-	log.Printf("%d numbers are going to be check from owner %s. The probabily to win a prize is %g%%\n", personNumbersToCheckNum, owner, probabilityOfWin)
+	log.Printf("%d numbers are going to be check from owner %s. The probability to win a prize is %g%%\n", personNumbersToCheckNum, owner, probabilityOfWin)
 	for j := 0; j < personNumbersToCheckNum; j++ {
 		number := personNumbersToCheck.Numbers[j].Number
 		bet := personNumbersToCheck.Numbers[j].BetAmount
