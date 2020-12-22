@@ -118,6 +118,18 @@ The following are different examples of execution:
       --notify, -n                             Activate notifications through PushOver (default: false)
       --help, -h                               show help (default: false)
 
+## Helm chart
+
+A [helm chart](./helm/check-christmas-lottery-numbers) has been created in order to run the CLI as a [cronJob](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/) in Kubernetes.
+
+Here is an example of use:
+```shell
+helm upgrade --install check-christmas-lottery-numbers ./helm/check-christmas-lottery-numbers \
+  --set config.push_over_notification_token=$(echo "PUSH_OVER_NOTIFICATION_TOKEN" | base64) \
+  --set config.push_over_notification_user=$(echo "PUSH_OVER_NOTIFICATION_USER" | base64) \
+  --set-file numbers_to_check\.json=<number_to_check_dir>
+```
+
 ### Running the tests
 Due to being an application with a single entry point, it does not make sense to perform unit tests, but rather integration tests that check that the expected actions are performed based on the input parameters provided.
 

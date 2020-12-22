@@ -1,0 +1,28 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: {{ include "check-christmas-lottery-numbers.fullname" . }}
+  labels:
+  {{- include "check-christmas-lottery-numbers.labels" . | nindent 4 }}
+spec:
+  jobTemplate:
+    metadata:
+      name: check-christmas-lottery-numbers
+    spec:
+      template:
+        spec:
+          containers:
+            - image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default "latest" }}"
+              name: check-christmas-lottery-numbers
+              envFrom:
+              - secretRef:
+                  name: {{ include "check-christmas-lottery-numbers.fullname" . }}-secret
+              volumeMounts:
+              - name: config-volume
+                mountPath: /tmp/
+          volumes:
+            - name: config-volume
+              configMap:
+                name: {{ include "check-christmas-lottery-numbers.fullname" . }}-config
+          restartPolicy: OnFailure
+  schedule: '*/1 * * * *'

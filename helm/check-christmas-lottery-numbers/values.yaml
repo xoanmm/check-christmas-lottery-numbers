@@ -1,0 +1,19 @@
+# Default values for check-christmas-lottery-numbers.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: check-christmas-lottery-numbers
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+config:
+  push_over_notification_token: ""
+  push_over_notification_user: ""

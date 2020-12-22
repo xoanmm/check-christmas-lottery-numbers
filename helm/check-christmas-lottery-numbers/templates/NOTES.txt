@@ -1,0 +1,1 @@
+check-christmas-lottery-numbers version: {{ .Chart.AppVersion }}
