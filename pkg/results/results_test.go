@@ -12,6 +12,7 @@ import (
 const numberToUseForCheck = "74730"
 const correctLotteryDrawResultsAPIURL = "http://api.elpais.com/ws/LoteriaNavidadPremiados"
 const inCorrectLotteryDrawResultsAPIURLForJSONUnmarshall = "http://api.elpais.com/ws/LoteriaNavidadPremiadoss"
+const actualLotteryDrawStatusCode = 4
 
 func TestMain(m *testing.M) {
 	code := m.Run()
@@ -25,7 +26,7 @@ func TestGetAPILotteryDrawStatus(t *testing.T) {
 		log.Fatal(err)
 	}
 
-	expectedResultStatus := 1
+	expectedResultStatus := actualLotteryDrawStatusCode
 	expectedResultError := 0
 	expectedDrawStatus := NewLotteryDrawStatus(expectedResultStatus, expectedResultError)
 
