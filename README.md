@@ -136,6 +136,14 @@ Below are examples of how to use the chart:
   -n <check-christmas-lottery-numbers-namespace-name>
   ```
 
+- Create [cronJob](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/) that executes each <N> minutes check-christmas-lottery-numbers and necessary resources with sending notifications disabled:
+  ```shell
+  helm upgrade --install check-christmas-lottery-numbers ./helm/check-christmas-lottery-numbers \
+  --set config.minutesSchedulePeriod=<N> \
+  --set-file numbers_to_check=<number_to_check_dir> \
+  -n <check-christmas-lottery-numbers-namespace-name>
+  ```
+
 - Create [cronJob](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/) that executes each ten minutes check-christmas-lottery-numbers and necessary resources with sending notifications enabled:
   ```shell
   helm upgrade --install check-christmas-lottery-numbers ./helm/check-christmas-lottery-numbers \

@@ -43,4 +43,8 @@ spec:
           imagePullSecrets:
             - name: {{ .Values.imageCredentials.name }}
           {{ end }}
-  schedule: '*/1 * * * *'
+  {{- if .Values.config.minutesSchedulePeriod }}
+  schedule: '*/{{ .Values.config.minutesSchedulePeriod}} * * * *'
+  {{- else }}
+  schedule: '*/10 * * * *'
+  {{- end}}
