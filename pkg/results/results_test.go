@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-const numberToUseForCheck = 74730
+const numberToUseForCheck = "74730"
 const correctLotteryDrawResultsAPIURL = "http://api.elpais.com/ws/LoteriaNavidadPremiados"
 const inCorrectLotteryDrawResultsAPIURLForJSONUnmarshall = "http://api.elpais.com/ws/LoteriaNavidadPremiadoss"
 
@@ -123,7 +123,10 @@ func resultEqualWithoutTimestamp(expected Result, obtained Result) bool {
 }
 
 func TestCheckNumberCorrect(t *testing.T) {
-	expectedResult := NewResult(numberToUseForCheck, 0, 51515151, 1, 0)
+	expectedResult, err := NewResult(numberToUseForCheck, 0, 51515151, 1, 0)
+	if err != nil {
+		log.Fatal(err)
+	}
 	result, err := CheckNumber(correctLotteryDrawResultsAPIURL, numberToUseForCheck, 20, "origin_test")
 
 	if err != nil {
@@ -136,8 +139,11 @@ func TestCheckNumberCorrect(t *testing.T) {
 }
 
 func TestCheckNumberIncorrect(t *testing.T) {
-	expectedResult := NewResult(0, 0, 0, 0, 1)
-	result, err := CheckNumber(correctLotteryDrawResultsAPIURL, 7455730, 20, "origin_test")
+	expectedResult, err := NewResult("0", 0, 0, 0, 1)
+	if err != nil {
+		log.Fatal(err)
+	}
+	result, err := CheckNumber(correctLotteryDrawResultsAPIURL, "7455730", 20, "origin_test")
 
 	if err != nil {
 		log.Fatal(err)

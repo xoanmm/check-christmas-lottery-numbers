@@ -1,5 +1,7 @@
 package results
 
+import "strconv"
+
 // Number struct which information about
 // each lottery number to check
 type Number struct {
@@ -32,8 +34,12 @@ type Result struct {
 }
 
 // NewResult allows to create a Result type struct providing all the information for it
-func NewResult(numero int, premio int, timestamp int, status int, error int) *Result {
-	return &Result{numero, premio, timestamp, status, error}
+func NewResult(numero string, premio int, timestamp int, status int, error int) (*Result, error) {
+	numero_int, err := strconv.Atoi(numero)
+	if err != nil {
+		return nil, err
+	}
+	return &Result{numero_int, premio, timestamp, status, error}, nil
 }
 
 // LotteryDrawStatus which contain information about

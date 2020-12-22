@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-const numberToUseForCheck = 74730
+const numberToUseForCheck = "74730"
 
 // setupEnv checks if there is an `.env' file where a series of variables
 // used to perform the integration tests are defined
@@ -31,7 +31,7 @@ func TestMain(m *testing.M) {
 }
 
 func TestSendPushOverNotification(t *testing.T) {
-	finalPrize := 2000
+	finalPrize := 2000.00
 	number := numberToUseForCheck
 	origin := "test-origin"
 
