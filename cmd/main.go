@@ -64,7 +64,7 @@ func buildCLI() *cli.App {
 			if err != nil {
 				return err
 			}
-			log.Println(message)
+			log.Println(*message)
 			personNumbers, err := results.OpenFilePersonsNumbersToCheck(fileNumbersToCheck)
 			if err != nil {
 				return err
