@@ -112,7 +112,7 @@ func CheckNumber(lotteryDrawResultsAPIURL string, number int, bet int, origin st
 }
 
 // isNecessaryNotify check if is necessary notify for each number result
-func isNecessaryNotify(finalPrize int, notify bool) bool {
+func isNecessaryNotify(finalPrize float64, notify bool) bool {
 	if finalPrize > 0 && notify {
 		return true
 	}
@@ -127,8 +127,9 @@ func getProbabilityOfWin(number int) float64 {
 
 // GetFinalPrizeFromBet calculate the prize to obtain using the prize
 // and the bet
-func getFinalPrizeFromBet(bet int, premio int) int {
-	return (20 / bet) * (premio)
+func getFinalPrizeFromBet(bet int, premio int) float64 {
+	porcentage := float64( premio/ 20.0)
+	return float64(bet) * porcentage
 }
 
 // CheckPersonsNumbers checks the prize for the numbers of a list of persons
@@ -165,7 +166,7 @@ func checkPersonNumbers(lotteryDrawResultsAPIURL string, personNumbersToCheck Pe
 			return err
 		}
 		finalPrize := getFinalPrizeFromBet(bet, numberCheckResult.Premio)
-		log.Printf("Prize obtained for number %d with %d € bet and origin is %d€\n", number, bet, finalPrize)
+		log.Printf("Prize obtained for number %d with %d € bet and origin %s is %.2f€\n", number, bet, origin, finalPrize)
 		if isNecessaryNotify(finalPrize, notify) {
 			notificationResult, err := notifications.SendPushOverNotification(finalPrize, number, origin)
 			if err != nil {
