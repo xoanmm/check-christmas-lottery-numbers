@@ -128,7 +128,7 @@ func getProbabilityOfWin(number int) float64 {
 // GetFinalPrizeFromBet calculate the prize to obtain using the prize
 // and the bet
 func getFinalPrizeFromBet(bet int, premio int) float64 {
-	porcentage := float64( premio/ 20.0)
+	porcentage := float64(premio / 20.0)
 	return float64(bet) * porcentage
 }
 
