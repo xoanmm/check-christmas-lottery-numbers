@@ -3,7 +3,7 @@ package results
 // Number struct which information about
 // each lottery number to check
 type Number struct {
-	Number    int    `json:"number"`
+	Number    string    `json:"number"`
 	BetAmount int    `json:"bet_amount"`
 	Origin    string `json:"origin"`
 }

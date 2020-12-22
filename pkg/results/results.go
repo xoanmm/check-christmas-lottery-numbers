@@ -96,11 +96,11 @@ func converStrResponseToResult(response string) (*Result, error) {
 }
 
 // CheckNumber check if a specific lottery number has prize
-func CheckNumber(lotteryDrawResultsAPIURL string, number int, bet int, origin string) (*Result, error) {
+func CheckNumber(lotteryDrawResultsAPIURL string, number string, bet int, origin string) (*Result, error) {
 
-	log.Printf("Checking prize obtained for number %d with %d€ bet and origin %s\n", number, bet, origin)
+	log.Printf("Checking prize obtained for number %s with %d€ bet and origin %s\n", number, bet, origin)
 
-	res, err := requests.DoGetRequest(fmt.Sprintf("%s?s=1&n=%d", lotteryDrawResultsAPIURL, number))
+	res, err := requests.DoGetRequest(fmt.Sprintf("%s?s=1&n=%s", lotteryDrawResultsAPIURL, number))
 	if err != nil {
 		return nil, err
 	}
@@ -166,7 +166,7 @@ func checkPersonNumbers(lotteryDrawResultsAPIURL string, personNumbersToCheck Pe
 			return err
 		}
 		finalPrize := getFinalPrizeFromBet(bet, numberCheckResult.Premio)
-		log.Printf("Prize obtained for number %d with %d € bet and origin %s is %.2f€\n", number, bet, origin, finalPrize)
+		log.Printf("Prize obtained for number %s with %d € bet and origin %s is %.2f€\n", number, bet, origin, finalPrize)
 		if isNecessaryNotify(finalPrize, notify) {
 			notificationResult, err := notifications.SendPushOverNotification(finalPrize, number, origin)
 			if err != nil {
