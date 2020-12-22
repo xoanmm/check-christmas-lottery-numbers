@@ -123,7 +123,7 @@ func resultEqualWithoutTimestamp(expected Result, obtained Result) bool {
 }
 
 func TestCheckNumberCorrect(t *testing.T) {
-	expectedResult := NewResult(numberToUseForCheck, 0, 51515151, 0, 0)
+	expectedResult := NewResult(numberToUseForCheck, 0, 51515151, 1, 0)
 	result, err := CheckNumber(correctLotteryDrawResultsAPIURL, numberToUseForCheck, 20, "origin_test")
 
 	if err != nil {
@@ -144,6 +144,7 @@ func TestCheckNumberIncorrect(t *testing.T) {
 	}
 
 	if !resultEqualWithoutTimestamp(*expectedResult, *result) {
+		fmt.Println(result)
 		log.Fatal("Result and expected result for number are not equal")
 	}
 }
