@@ -124,7 +124,7 @@ func resultEqualWithoutTimestamp(expected Result, obtained Result) bool {
 }
 
 func TestCheckNumberCorrect(t *testing.T) {
-	expectedResult, err := NewResult(numberToUseForCheck, 0, 51515151, 1, 0)
+	expectedResult, err := NewResult(numberToUseForCheck, 0, 51515151, actualLotteryDrawStatusCode, 0)
 	if err != nil {
 		log.Fatal(err)
 	}
