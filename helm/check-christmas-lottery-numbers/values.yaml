@@ -6,9 +6,15 @@ replicaCount: 1
 
 image:
   repository: xoanmallon/check-christmas-lottery-numbers
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
+
+imageCredentials:
+  url: ""
+  username: ""
+  password: ""
+  name: ""
 
 imagePullSecrets: []
 nameOverride: ""
@@ -17,3 +23,4 @@ fullnameOverride: ""
 config:
   push_over_notification_token: ""
   push_over_notification_user: ""
+  notify: true

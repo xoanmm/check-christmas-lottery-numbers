@@ -122,13 +122,41 @@ The following are different examples of execution:
 
 A [helm chart](./helm/check-christmas-lottery-numbers) has been created in order to run the CLI as a [cronJob](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/) in Kubernetes.
 
-Here is an example of use:
+It is recommended to create a unique namespace to use the chart, this can be done through the following command:
 ```shell
-helm upgrade --install check-christmas-lottery-numbers ./helm/check-christmas-lottery-numbers \
-  --set config.push_over_notification_token=$(echo "PUSH_OVER_NOTIFICATION_TOKEN" | base64) \
-  --set config.push_over_notification_user=$(echo "PUSH_OVER_NOTIFICATION_USER" | base64) \
-  --set-file numbers_to_check\.json=<number_to_check_dir>
+kubectl create namespace <check-christmas-lottery-numbers-namespace-name> --dry-run -o yaml | kubectl apply -f -
 ```
+
+Below are examples of how to use the chart:
+
+- Create [cronJob](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/) that executes each ten minutes check-christmas-lottery-numbers and necessary resources with sending notifications disabled:
+  ```shell
+  helm upgrade --install check-christmas-lottery-numbers ./helm/check-christmas-lottery-numbers \
+  --set-file numbers_to_check=<number_to_check_dir> \
+  -n <check-christmas-lottery-numbers-namespace-name>
+  ```
+
+- Create [cronJob](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/) that executes each ten minutes check-christmas-lottery-numbers and necessary resources with sending notifications enabled:
+  ```shell
+  helm upgrade --install check-christmas-lottery-numbers ./helm/check-christmas-lottery-numbers \
+  --set config.push_over_notification_token=$(echo -n "<PUSH_OVER_NOTIFICATION_TOKEN>" | base64 | tr -d "\n") \
+  --set config.push_over_notification_user=$(echo -n "<PUSH_OVER_NOTIFICATION_USER>" | base64 | tr -d "\n") \
+  --set-file numbers_to_check=<number_to_check_file_dir> \
+  -n <check-christmas-lottery-numbers-namespace-name>
+  ```
+
+- Create [cronJob](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/) that executes each ten minutes check-christmas-lottery-numbers and necessary resources with sending notifications enabled, also creates a [Secret](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/) with dockerhub credentials to avoid problem with limit in pull requests:
+  ```shell
+  helm upgrade --install check-christmas-lottery-numbers ./helm/check-christmas-lottery-numbers \
+  --set config.push_over_notification_token=$(echo -n "<PUSH_OVER_NOTIFICATION_TOKEN>" | base64 | tr -d "\n") \
+  --set config.push_over_notification_user=$(echo -n "<PUSH_OVER_NOTIFICATION_USER>" | base64 | tr -d "\n") \
+  --set imageCredentials.url=https://index.docker.io/v1/  \
+  --set imageCredentials.username=<dockerhub_username> \
+  --set imageCredentials.password=<dockerhub_password> \
+  --set imageCredentials.name=<dockhub_pull_secret_name> \
+  --set-file numbers_to_check=<number_to_check_file_dir> \
+  -n <check-christmas-lottery-numbers-namespace-name>
+  ```
 
 ### Running the tests
 Due to being an application with a single entry point, it does not make sense to perform unit tests, but rather integration tests that check that the expected actions are performed based on the input parameters provided.

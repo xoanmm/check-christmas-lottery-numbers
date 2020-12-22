@@ -5,5 +5,4 @@ metadata:
   labels:
     {{- include "check-christmas-lottery-numbers.labels" . | nindent 4 }}
 data:
-  numbers_to_check.json: |-
-{{ .Files.Get "numbers_to_check.json" | indent 4}}
+  numbers_to_check.json: |-{{ .Values.numbers_to_check | nindent 4 }}

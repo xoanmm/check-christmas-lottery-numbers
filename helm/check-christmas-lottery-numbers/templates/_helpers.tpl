@@ -35,6 +35,7 @@ Create chart name and version as used by the chart label.
 Common labels
 */}}
 {{- define "check-christmas-lottery-numbers.labels" -}}
+app: {{ .Chart.Name}}
 helm.sh/chart: {{ include "check-christmas-lottery-numbers.chart" . }}
 {{ include "check-christmas-lottery-numbers.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
@@ -49,4 +50,12 @@ Selector labels
 {{- define "check-christmas-lottery-numbers.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "check-christmas-lottery-numbers.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
+
+{{- define "imagePullSecret" }}
+{{- if .Values.imageCredentials.password }}
+{{- with .Values.imageCredentials }}
+{{- printf "{\"auths\": {\"%s\": {\"auth\": \"%s\"}}}" .url (printf "%s:%s" .username .password | b64enc) | b64enc }}
+{{- end }}
+{{- end }}
 {{- end }}

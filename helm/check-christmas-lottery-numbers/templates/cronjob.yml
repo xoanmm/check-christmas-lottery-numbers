@@ -2,21 +2,35 @@ apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
   name: {{ include "check-christmas-lottery-numbers.fullname" . }}
-  labels:
-  {{- include "check-christmas-lottery-numbers.labels" . | nindent 4 }}
+  labels: {{- include "check-christmas-lottery-numbers.labels" . | nindent 4 }}
 spec:
   jobTemplate:
     metadata:
       name: check-christmas-lottery-numbers
+      labels:
+        {{- include "check-christmas-lottery-numbers.labels" . | nindent 8 }}
     spec:
       template:
         spec:
           containers:
             - image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default "latest" }}"
               name: check-christmas-lottery-numbers
-              envFrom:
-              - secretRef:
-                  name: {{ include "check-christmas-lottery-numbers.fullname" . }}-secret
+              {{- if eq .Values.config.notify true }}
+              command:
+                - "./check-christmas-lottery-numbers"
+                - "-n"
+              env:
+                - name: PUSH_OVER_NOTIFICATION_TOKEN
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ include "check-christmas-lottery-numbers.fullname" . }}-secret
+                      key: PUSH_OVER_NOTIFICATION_TOKEN
+                - name: PUSH_OVER_NOTIFICATION_USER
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ include "check-christmas-lottery-numbers.fullname" . }}-secret
+                      key: PUSH_OVER_NOTIFICATION_USER
+              {{- end }}
               volumeMounts:
               - name: config-volume
                 mountPath: /tmp/
@@ -25,4 +39,8 @@ spec:
               configMap:
                 name: {{ include "check-christmas-lottery-numbers.fullname" . }}-config
           restartPolicy: OnFailure
+          {{ if .Values.imageCredentials.password }}
+          imagePullSecrets:
+            - name: {{ .Values.imageCredentials.name }}
+          {{ end }}
   schedule: '*/1 * * * *'
