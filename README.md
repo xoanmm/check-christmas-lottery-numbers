@@ -1,6 +1,7 @@
-[![GitHub Release](https://img.shields.io/github/release/xoanmm/check-christmas-lottery-numbers.svg?logo=github&labelColor=262b30)](https://github.com/xoanmm/check-christmas-lottery-numbers/releases)
-[![Go Report Card](https://goreportcard.com/badge/github.com/xoanmm/check-christmas-lottery-numbers)](https://goreportcard.com/report/github.com/xoanmm/check-christmas-lottery-numbers)
-[![License](https://img.shields.io/github/license/xoanmm/check-christmas-lottery-numbers)](https://github.com/xoanmm/check-christmas-lottery-numbers/LICENSE)
+[![Tests][tests-badge]][tests-link]
+[![GitHub Release][release-badge]][release-link]
+[![Go Report Card][report-badge]][report-link]
+[![License][license-badge]][license-link]
 
 # check-christmas-lottery-numbers
 CLI to check the lottery numbers with the possibility to send notifications for the winning numbers using [PushOver](https://pushover.net/).
@@ -186,3 +187,16 @@ A series of variables must be provided in order to carry out the execution of th
 ### Author(s)
 
 - [xoanmm](https://github.com/xoanmm)
+
+<!-- JUST BADGES & LINKS -->
+[tests-badge]: https://img.shields.io/github/workflow/status/xoanmm/check-christmas-lottery-numbers/Test
+[tests-link]: https://github.com/xoanmm/check-christmas-lottery-numbers/actions?query=workflow%3ATest
+
+[release-badge]: https://img.shields.io/github/release/xoanmm/check-christmas-lottery-numbers.svg?logo=github&labelColor=262b30
+[release-link]: https://github.com/xoanmm/check-christmas-lottery-numbers/releases
+
+[report-badge]: https://goreportcard.com/badge/github.com/xoanmm/check-christmas-lottery-numbers
+[report-link]: https://goreportcard.com/report/github.com/xoanmm/check-christmas-lottery-numbers
+
+[license-badge]: https://img.shields.io/github/license/xoanmm/check-christmas-lottery-numbers
+[license-link]: https://github.com/xoanmm/check-christmas-lottery-numbers/blob/master/LICENSE
