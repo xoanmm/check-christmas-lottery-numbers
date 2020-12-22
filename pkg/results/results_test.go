@@ -25,7 +25,7 @@ func TestGetAPILotteryDrawStatus(t *testing.T) {
 		log.Fatal(err)
 	}
 
-	expectedResultStatus := 0
+	expectedResultStatus := 1
 	expectedResultError := 0
 	expectedDrawStatus := NewLotteryDrawStatus(expectedResultStatus, expectedResultError)
 

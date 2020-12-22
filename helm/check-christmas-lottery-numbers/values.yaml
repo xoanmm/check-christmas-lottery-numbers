@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  repository: check-christmas-lottery-numbers
+  repository: xoanmallon/check-christmas-lottery-numbers
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
