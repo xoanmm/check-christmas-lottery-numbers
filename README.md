@@ -34,13 +34,13 @@ A JSON file must be provided with the people whose numbers we want to check, fol
             "owner": "<owner_name_1>",
             "numbers": [
                 {
-                    "number": <number_to_check>,
+                    "number": "<number_to_check>",
                     "bet_amount": <bet_amount>,
                     "origin": "<number_origin>"
                 },
                 . . .
                 {
-                    "number": <number_to_check>,
+                    "number": "<number_to_check>",
                     "bet_amount": <bet_amount>,
                     "origin": "<number_origin>"
                 }
@@ -51,13 +51,13 @@ A JSON file must be provided with the people whose numbers we want to check, fol
             "owner": "<owner_name_N>",
             "numbers": [
                 {
-                    "number": <number_to_check>,
+                    "number": "<number_to_check>",
                     "bet_amount": <bet_amount>,
                     "origin": "<number_origin>"
                 },
                 . . .
                 {
-                    "number": <number_to_check>,
+                    "number": "<number_to_check>",
                     "bet_amount": <bet_amount>,
                     "origin": "<number_origin>"
                 }
