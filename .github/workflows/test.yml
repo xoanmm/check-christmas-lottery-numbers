@@ -33,3 +33,32 @@ jobs:
         env:
           PUSH_OVER_NOTIFICATION_TOKEN: ${{ secrets.PUSH_OVER_NOTIFICATION_TOKEN }}
           PUSH_OVER_NOTIFICATION_USER: ${{ secrets.PUSH_OVER_NOTIFICATION_USER }}
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v1
+        with:
+          name: ${{ matrix.platform }}_coverage
+          path: ${{ matrix.platform }}_coverage.out
+
+  coverage:
+    runs-on: ubuntu-latest
+    needs: tests
+    steps:
+      - name: Install Go
+        uses: actions/setup-go@v1
+        with:
+          go-version: ${{ matrix.go-version }}
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - run: git fetch --prune --unshallow
+
+      - name: Download coverage report
+        uses: actions/download-artifact@v1
+        with:
+          name: ubuntu-latest_coverage
+
+      - name: Analyze with SonarCloud
+        uses: sonarsource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
