@@ -148,8 +148,8 @@ Below are examples of how to use the chart:
 - Create [cronJob](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/) that executes each ten minutes check-christmas-lottery-numbers and necessary resources with sending notifications enabled:
   ```shell
   helm upgrade --install check-christmas-lottery-numbers ./helm/check-christmas-lottery-numbers \
-  --set config.push_over_notification_token=$(echo -n "<PUSH_OVER_NOTIFICATION_TOKEN>" | base64 | tr -d "\n") \
-  --set config.push_over_notification_user=$(echo -n "<PUSH_OVER_NOTIFICATION_USER>" | base64 | tr -d "\n") \
+  --set config.push_over_notification_token=$$PUSH_OVER_NOTIFICATION_TOKEN \
+  --set config.push_over_notification_user=$PUSH_OVER_NOTIFICATION_USER \
   --set-file numbers_to_check=<number_to_check_file_dir> \
   -n <check-christmas-lottery-numbers-namespace-name>
   ```
@@ -157,8 +157,8 @@ Below are examples of how to use the chart:
 - Create [cronJob](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/) that executes each ten minutes check-christmas-lottery-numbers and necessary resources with sending notifications enabled, also creates a [Secret](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/) with dockerhub credentials to avoid problem with limit in pull requests:
   ```shell
   helm upgrade --install check-christmas-lottery-numbers ./helm/check-christmas-lottery-numbers \
-  --set config.push_over_notification_token=$(echo -n "<PUSH_OVER_NOTIFICATION_TOKEN>" | base64 | tr -d "\n") \
-  --set config.push_over_notification_user=$(echo -n "<PUSH_OVER_NOTIFICATION_USER>" | base64 | tr -d "\n") \
+  --set config.push_over_notification_token=$PUSH_OVER_NOTIFICATION_TOKEN \
+  --set config.push_over_notification_user=$PUSH_OVER_NOTIFICATION_USER \
   --set imageCredentials.url=https://index.docker.io/v1/  \
   --set imageCredentials.username=<dockerhub_username> \
   --set imageCredentials.password=<dockerhub_password> \
