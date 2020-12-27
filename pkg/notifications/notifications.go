@@ -51,13 +51,13 @@ func sendPushOverNotificationMessage(notificationToken string, notificationUser 
 }
 
 // SendPushOverNotification makes a notification with pushOver to warn that a prize has been won
-func SendPushOverNotification(finalPrize float64, number string, origin string) (*NotificationResult, error) {
+func SendPushOverNotification(owner string, finalPrize float64, number string, origin string) (*NotificationResult, error) {
 	log.Println("A notification is going to be send with pushOver")
 	notificationToken, notificationUser, err := getNecessaryNotificationParams()
 	if err != nil {
 		return nil, err
 	}
-	message := fmt.Sprintf("You won %.2f€ € with number %s obtained from %s", finalPrize, number, origin)
+	message := fmt.Sprintf("%s won %.2f€ € with number %s obtained from %s", owner, finalPrize, number, origin)
 	notificationResult, err := sendPushOverNotificationMessage(*notificationToken, *notificationUser, message)
 	if err != nil {
 		return nil, err

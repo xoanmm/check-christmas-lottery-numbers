@@ -1,0 +1,41 @@
+{{- if and (eq .Values.config.notify "true") (eq .Values.config.storeNotifications "true") }}
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: check-christmas-lottery-numbers-mongo
+  labels:
+    app: check-christmas-lottery-numbers-mongo
+spec:
+  replicas: 1
+  serviceName: kre-mongo
+  selector:
+    matchLabels:
+      app: check-christmas-lottery-numbers-mongo
+  template:
+    metadata:
+      labels:
+        app: check-christmas-lottery-numbers-mongo
+    spec:
+      containers:
+        - name: kre-mongo
+          image: mongo:4.2.8
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - secretRef:
+                name: check-christmas-lottery-numbers-mongo-secret
+          ports:
+            - containerPort: 27017
+          volumeMounts:
+            - name: check-christmas-lottery-numbers-mongo-pvc
+              mountPath: "/data/db"
+  volumeClaimTemplates:
+    - metadata:
+        name: check-christmas-lottery-numbers-mongo-pvc
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        storageClassName: {{ .Values.config.mongodb.storage.className }}
+        resources:
+          requests:
+            storage:  {{ .Values.config.mongodb.storage.size }}
+{{- end }}

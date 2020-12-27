@@ -12,24 +12,33 @@ spec:
     spec:
       template:
         spec:
+          {{- if eq .Values.config.notify "true" }}
+          initContainers:
+            - name: wait-mongo
+              image: busybox:1.28
+              command: ['sh', '-c', 'until wget --spider -S check-christmas-lottery-numbers-mongo:27017; do echo waiting for check-christmas-lottery-numbers-mongo; sleep 2; done']
+          {{- end }}
           containers:
             - image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default "latest" }}"
               name: check-christmas-lottery-numbers
-              {{- if eq .Values.config.notify true }}
+              {{- if eq .Values.config.notify "true" }}
               command:
                 - "./check-christmas-lottery-numbers"
                 - "-n"
-              env:
-                - name: PUSH_OVER_NOTIFICATION_TOKEN
-                  valueFrom:
-                    secretKeyRef:
-                      name: {{ include "check-christmas-lottery-numbers.fullname" . }}-secret
-                      key: PUSH_OVER_NOTIFICATION_TOKEN
-                - name: PUSH_OVER_NOTIFICATION_USER
-                  valueFrom:
-                    secretKeyRef:
-                      name: {{ include "check-christmas-lottery-numbers.fullname" . }}-secret
-                      key: PUSH_OVER_NOTIFICATION_USER
+                - "-d={{ .Values.config.lotteryDraw }}"
+                {{- if and (eq .Values.config.notify "true") (eq .Values.config.storeNotifications "true")}}
+                - "-s"
+                - "-m=check-christmas-lottery-numbers-mongo:27017"
+                {{- end }}
+              {{- end }}
+              {{- if eq .Values.config.notify "true" }}
+              envFrom:
+                - secretRef:
+                    name: {{ include "check-christmas-lottery-numbers.fullname" . }}-secret
+                {{- if eq .Values.config.storeNotifications "true"}}
+                - secretRef:
+                    name: check-christmas-lottery-numbers-mongo-secret
+                {{- end }}
               {{- end }}
               volumeMounts:
               - name: config-volume
@@ -47,4 +56,4 @@ spec:
   schedule: '*/{{ .Values.config.minutesSchedulePeriod}} * * * *'
   {{- else }}
   schedule: '*/10 * * * *'
-  {{- end}}
+  {{- end }}

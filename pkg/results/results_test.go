@@ -13,6 +13,7 @@ const numberToUseForCheck = "74730"
 const correctLotteryDrawResultsAPIURL = "http://api.elpais.com/ws/LoteriaNavidadPremiados"
 const inCorrectLotteryDrawResultsAPIURLForJSONUnmarshall = "http://api.elpais.com/ws/LoteriaNavidadPremiadoss"
 const actualLotteryDrawStatusCode = 4
+const mongoCollectionForTests = "christmas"
 
 func TestMain(m *testing.M) {
 	code := m.Run()
@@ -20,7 +21,7 @@ func TestMain(m *testing.M) {
 }
 
 func TestGetAPILotteryDrawStatus(t *testing.T) {
-	drawStatus, err := GetAPILotteryDrawStatus(correctLotteryDrawResultsAPIURL)
+	drawStatus, err := GetAPILotteryDrawStatus(mongoCollectionForTests, correctLotteryDrawResultsAPIURL)
 
 	if err != nil {
 		log.Fatal(err)
@@ -36,7 +37,7 @@ func TestGetAPILotteryDrawStatus(t *testing.T) {
 }
 
 func TestGetAPILotteryDrawStatusIncorrectUrlForJSONUnmarshall(t *testing.T) {
-	_, err := GetAPILotteryDrawStatus(inCorrectLotteryDrawResultsAPIURLForJSONUnmarshall)
+	_, err := GetAPILotteryDrawStatus(mongoCollectionForTests, inCorrectLotteryDrawResultsAPIURLForJSONUnmarshall)
 
 	expectedError := errors.New("invalid character '>' after top-level value")
 	if err.Error() != expectedError.Error() {
@@ -46,7 +47,7 @@ func TestGetAPILotteryDrawStatusIncorrectUrlForJSONUnmarshall(t *testing.T) {
 
 func TestGetAPILotteryDrawStatusIncorrectUrlForRequest(t *testing.T) {
 	inCorrectLotteryDrawResultsAPIURLForRequest := "http:/api.elpais.com/ws/LoteriaNavidadPremiadoss"
-	_, err := GetAPILotteryDrawStatus(inCorrectLotteryDrawResultsAPIURLForRequest)
+	_, err := GetAPILotteryDrawStatus(mongoCollectionForTests, inCorrectLotteryDrawResultsAPIURLForRequest)
 	inCorrectLotteryDrawResultsAPIURLForRequestInRequest := "http:///api.elpais.com/ws/LoteriaNavidadPremiadoss"
 	expectedError := fmt.Errorf(
 		"Get \"%s?s=1\": http: no Host in request URL",
@@ -167,7 +168,7 @@ func TestCheckNumbersWithoutNotify(t *testing.T) {
 		Owner:   "test-owner",
 	}}}
 
-	err := CheckPersonsNumbers(correctLotteryDrawResultsAPIURL, &personNumbersToCheck, false)
+	err := CheckPersonsNumbers(correctLotteryDrawResultsAPIURL, &personNumbersToCheck, mongoCollectionForTests, false, false, "", "", "", 0)
 
 	if err != nil {
 		log.Fatal(err)

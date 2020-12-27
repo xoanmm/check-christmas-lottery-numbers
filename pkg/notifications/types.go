@@ -1,5 +1,7 @@
 package notifications
 
+import "go.mongodb.org/mongo-driver/bson/primitive"
+
 // Notification struct which contain information
 // about notification for PushOver app
 type Notification struct {
@@ -13,4 +15,17 @@ type Notification struct {
 type NotificationResult struct {
 	Status  int    `json:"status"`
 	Request string `json:"request"`
+}
+
+// NotificationMongo struct which contain information
+// about notification send with a number result with prize
+type NotificationMongo struct {
+	ID       primitive.ObjectID `bson:"_id,omitempty"`
+	Draw     string             `bson:"draw"`
+	Year     int                `bson:"year"`
+	Owner    string             `bson:"owner"`
+	Number   string             `bson:"number"`
+	Prize    float64            `bson:"prize"`
+	Origin   string             `bson:"origin"`
+	Notified bool               `bson:"notified"`
 }

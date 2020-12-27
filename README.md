@@ -2,6 +2,7 @@
 [![GitHub Release][release-badge]][release-link]
 [![Go Report Card][report-badge]][report-link]
 [![License][license-badge]][license-link]
+[![Coverage][coverage-badge]][coverage-link]
 
 # check-christmas-lottery-numbers
 CLI to check the lottery numbers with the possibility to send notifications for the winning numbers using [PushOver](https://pushover.net/).
@@ -23,6 +24,10 @@ If the user wants to send notifications, the following variables must be exporte
 - `PUSH_OVER_NOTIFICATION_TOKEN`: [PushOver](https://pushover.net/) account token for sending notifications
 
 - `PUSH_OVER_NOFITICATION_USER`: [PushOver](https://pushover.net/) Application/API token registered in account for receive notifications
+
+- `MONGO_INITDB_ROOT_USERNAME`: MongoDB Root Username of MongoDB host where the notifications results are going to be saved.
+
+- `MONGO_INITDB_ROOT_PASSWORD`: MongoDB Root Password of MongoDB host where the notifications results are going to be saved.
 
 ## Example of usage
 
@@ -70,34 +75,78 @@ A JSON file must be provided with the people whose numbers we want to check, fol
 
 The following are different examples of execution:
 
-- Checking numbers from the `numbers_to_check.json` file without sending notifications:
+- Checking numbers from the `numbers_to_check.json` file without sending notifications for christmas lottery draw:
     ```shell
-    $ ./check-christmas-lottery-numbers/cmd -f numbers_to_check_test.json
-    2020/12/21 18:17:27 Opening file /tmp/numbers_to_check_test.json with numbers to check
-    2020/12/21 18:17:27 Successfully opened file /tmp/numbers_to_check_test.json with numbers to check
-    2020/12/21 18:17:27 Numbers are going to be check from 2 different owners
-    2020/12/21 18:17:27 1 numbers are going to be check from owner Xoan. The probabily to win a prize is 0.001%
-    2020/12/21 18:17:27 Checking prize obtained for number 48335 with 5€ bet and origin My favourite restaurant
-    2020/12/21 18:17:27 Prize obtained for number 48335 with 5 € bet and origin is 0€
-    2020/12/21 18:17:27 1 numbers are going to be check from owner Manuel. The probabily to win a prize is 0.001%
-    2020/12/21 18:17:27 Checking prize obtained for number 48334 with 5€ bet and origin Company number
-    2020/12/21 18:17:27 Prize obtained for number 48334 with 5 € bet and origin is 0€
+    $ ./check-christmas-lottery-numbers -d christmas -f /tmp/numbers_to_check.json
+    2020/12/27 18:36:21 Checking the status of the christmas lottery draw
+    2020/12/27 18:36:21 The draw is over and the list of numbers is official
+    2020/12/27 18:36:21 Opening file /tmp/numbers_to_check.json with numbers to check
+    2020/12/27 18:36:21 Successfully opened file /tmp/numbers_to_check.json  with numbers to check
+    2020/12/27 18:36:21 Numbers are going to be check from 1 different owners
+    2020/12/27 18:36:21 2 numbers are going to be check from owner Xoan. The probability to win a prize is 0.002%
+    2020/12/27 18:36:21 Checking prize obtained for number 26967 with 5€ bet and origin My favourite restaurant
+    2020/12/27 18:36:22 Xoan won 5.00€ in number 26967 with 5 € bet and origin My favourite restaurant
+    2020/12/27 18:36:22 Checking prize obtained for number 33972 with 20€ bet and origin My company
+    2020/12/27 18:36:22 Xoan won 100.00€ in number 33972 with 20 € bet and origin My company
     ```
 
-- Checking numbers from the `numbers_to_check.json` file with sending notifications activated:
+- Checking numbers from the `numbers_to_check.json` file with sending notifications activated and without use mongodb to store notification for christmas lottery draw:
     ```shell
-    $ ./check-christmas-lottery-numbers/cmd -f numbers_to_check_test.json -n
-    2020/12/21 18:29:02 Opening file /tmp/numbers_to_check_test.json with numbers to check
-    2020/12/21 18:29:02 Successfully opened file /tmp/numbers_to_check_test.json with numbers to check
-    2020/12/21 18:29:02 Numbers are going to be check from 2 different owners
-    2020/12/21 18:29:02 1 numbers are going to be check from owner Xoan. The probabily to win a prize is 0.001%
-    2020/12/21 18:29:02 Checking prize obtained for number 26590 with 5€ bet and origin My favourite restaurant
-    2020/12/21 18:29:02 Prize obtained for number 26590 with 5 € bet and origin is 400000€
-    2020/12/21 18:29:02 A notification is going to be send with pushOver
-    2020/12/21 18:29:03 Notification send correctly with id 959d78e9-b8d1-4e66-8a79-0e105e799e90 to PushOver App
-    2020/12/21 18:29:03 1 numbers are going to be check from owner Manuel. The probabily to win a prize is 0.001%
-    2020/12/21 18:29:03 Checking prize obtained for number 48334 with 5€ bet and origin Company number
-    2020/12/21 18:29:04 Prize obtained for number 48334 with 5 € bet and origin is 0€
+    $ ./check-christmas-lottery-numbers -d="christmas" -f /tmp/numbers_to_check.json -n
+    2020/12/27 18:37:02 Checking the status of the christmas lottery draw
+    2020/12/27 18:37:02 The draw is over and the list of numbers is official
+    2020/12/27 18:37:02 Opening file /tmp/numbers_to_check.json with numbers to check
+    2020/12/27 18:37:02 Successfully opened file /tmp/numbers_to_check.json  with numbers to check
+    2020/12/27 18:37:02 Numbers are going to be check from 1 different owners
+    2020/12/27 18:37:02 2 numbers are going to be check from owner Xoan. The probability to win a prize is 0.002%
+    2020/12/27 18:37:02 Checking prize obtained for number 26967 with 5€ bet and origin My favourite restaurant
+    2020/12/27 18:37:03 Xoan won 5.00€ in number 26967 with 5 € bet and origin My favourite restaurant
+    2020/12/27 18:37:03 A notification is going to be send with pushOver
+    2020/12/27 18:37:03 Notification send correctly with id a600ed98-a640-4317-8c04-631fcdfdbccf to PushOver App
+    2020/12/27 18:37:03 Checking prize obtained for number 33972 with 20€ bet and origin My company
+    2020/12/27 18:37:03 Xoan won 100.00€ in number 33972 with 20 € bet and origin My company
+    2020/12/27 18:37:03 A notification is going to be send with pushOver
+    2020/12/27 18:37:04 Notification send correctly with id 8205a8e5-e11c-4741-8cac-51debc6fe201 to PushOver App
+    ```
+
+- Checking numbers from the `numbers_to_check.json` file with sending notifications activated and using mongodb for store notifications for christmas lottery draw:
+    ```shell
+    $ ./check-christmas-lottery-numbers -d="christmas" -m="localhost:27017" -f /tmp/numbers_to_check.json -n -s -u=<MONGO_INITDB_ROOT_USERNAME> -p=<MONGO_INITDB_ROOT_PASSWORD>
+    2020/12/27 18:43:34 Checking the status of the christmas lottery draw
+    2020/12/27 18:43:35 The draw is over and the list of numbers is official
+    2020/12/27 18:43:35 Opening file /tmp/numbers_to_check.json with numbers to check
+    2020/12/27 18:43:35 Successfully opened file /tmp/numbers_to_check.json  with numbers to check
+    2020/12/27 18:43:35 Numbers are going to be check from 1 different owners
+    2020/12/27 18:43:35 2 numbers are going to be check from owner Xoan. The probability to win a prize is 0.002%
+    2020/12/27 18:43:35 Checking prize obtained for number 26967 with 5€ bet and origin My favourite restaurant
+    2020/12/27 18:43:35 Xoan won 5.00€ in number 26967 with 5 € bet and origin My favourite restaurant
+    2020/12/27 18:43:35 Notification is not inserted in collection christmas yet
+    2020/12/27 18:43:35 A notification is going to be send with pushOver
+    2020/12/27 18:43:36 Notification send correctly with id 13e58739-ea10-4c04-aba1-3c78a8acfa21 to PushOver App
+    2020/12/27 18:43:36 Notification inserted sucessfully in mongodb collection with id ObjectID("5fe8c7c873fa0e4c8595e1ef")
+    2020/12/27 18:43:36 Checking prize obtained for number 33972 with 20€ bet and origin My company
+    2020/12/27 18:43:36 Xoan won 100.00€ in number 33972 with 20 € bet and origin My company
+    2020/12/27 18:43:36 Notification is not inserted in collection christmas yet
+    2020/12/27 18:43:36 A notification is going to be send with pushOver
+    2020/12/27 18:43:37 Notification send correctly with id 4332ea36-cce6-4831-8d3f-af40226366fd to PushOver App
+    2020/12/27 18:43:37 Notification inserted sucessfully in mongodb collection with id ObjectID("5fe8c7c973fa0e4c8595e1f0")
+    ```
+
+- Checking numbers from the `numbers_to_check.json` file with notifications activated for childhoods lottery draw:
+   ```shell
+    $ ./check-christmas-lottery-numbers -d="childhoods" -f /tmp/numbers_to_check.json -n
+    2020/12/27 17:48:10 Checking the status of the childhoods lottery draw
+    2020/12/27 17:48:11 The draw is over and the list of numbers is official
+    2020/12/27 17:48:11 Opening file /tmp/numbers_to_check.json with numbers to check
+    2020/12/27 17:48:11 Successfully opened file /tmp/numbers_to_check.json  with numbers to check
+    2020/12/27 17:48:11 Numbers are going to be check from 1 different owners
+    2020/12/27 17:48:11 2 numbers are going to be check from owner Xoan. The probability to win a prize is 0.002%
+    2020/12/27 17:48:11 Checking prize obtained for number 26967 with 5€ bet and origin My favourite restaurant
+    2020/12/27 17:48:12 Xoan won 0.00€ in number 26967 with 5 € bet and origin My favourite restaurant
+    2020/12/27 17:48:12 Checking prize obtained for number 33972 with 20€ bet and origin My company
+    2020/12/27 17:48:13 Xoan won 20.00€ in number 33972 with 20 € bet and origin My company
+    2020/12/27 17:48:13 A notification is going to be send with pushOver
+    2020/12/27 17:48:14 Notification send correctly with id 59389f39-28ba-4f90-8edb-86e4f66432c9 to PushOver App
     ```
 
 ## Usage
@@ -116,7 +165,12 @@ The following are different examples of execution:
     
     GLOBAL OPTIONS:
       --file-numbers-to-check value, -f value  JSON file with numbers to check (default: "/tmp/numbers_to_check.json")
+      --draw value, -d value                   Draw for which the numbers will be checked
       --notify, -n                             Activate notifications through PushOver (default: false)
+      --store-notifications, -s                Activate notifications store in mongodb (default: false)
+      --mongoHost value, -m value              Mongo Host URL used to store notifications (default: "localhost:27017")
+      --mongoRootUsername value, -u value      Root username for mongo host
+      --mongoRootPassword value, -p value      Root password for mongo host
       --help, -h                               show help (default: false)
 
 ## Helm chart
@@ -137,24 +191,30 @@ Below are examples of how to use the chart:
   -n <check-christmas-lottery-numbers-namespace-name>
   ```
 
-- Create [cronJob](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/) that executes each <N> minutes check-christmas-lottery-numbers and necessary resources with sending notifications disabled:
+- Create [cronJob](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/) that executes each `<N>` minutes check-christmas-lottery-numbers and necessary resources with sending notifications disabled:
   ```shell
   helm upgrade --install check-christmas-lottery-numbers ./helm/check-christmas-lottery-numbers \
   --set config.minutesSchedulePeriod=<N> \
   --set-file numbers_to_check=<number_to_check_dir> \
+  --set-string config.notify="false" \
   -n <check-christmas-lottery-numbers-namespace-name>
   ```
 
-- Create [cronJob](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/) that executes each ten minutes check-christmas-lottery-numbers and necessary resources with sending notifications enabled:
+- Create [cronJob](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/) that executes each ten minutes check-christmas-lottery-numbers and necessary resources with sending notifications enabled and store notifications enabled with a [statefulset](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/) with a mongo host to store notifications results:
   ```shell
   helm upgrade --install check-christmas-lottery-numbers ./helm/check-christmas-lottery-numbers \
   --set config.push_over_notification_token=$$PUSH_OVER_NOTIFICATION_TOKEN \
   --set config.push_over_notification_user=$PUSH_OVER_NOTIFICATION_USER \
   --set-file numbers_to_check=<number_to_check_file_dir> \
+  --set-string config.notify="true" \
+  --set-string config.storeNotifications="true" \
+  --set config.mongodb.rootCredentials.username="user" \
+  --set config.mongodb.rootCredentials.password="password" \
+  --set config.mongodb.storage.className="standard" \
   -n <check-christmas-lottery-numbers-namespace-name>
   ```
 
-- Create [cronJob](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/) that executes each ten minutes check-christmas-lottery-numbers and necessary resources with sending notifications enabled, also creates a [Secret](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/) with dockerhub credentials to avoid problem with limit in pull requests:
+- Create [cronJob](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/) that executes each ten minutes check-christmas-lottery-numbers and necessary resources with sending notifications enabled and store notifications enabled with a [statefulset](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/) with a mongo host to store notifications results, also creates a [Secret](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/) with dockerhub credentials to avoid problem with limit in pull requests:
   ```shell
   helm upgrade --install check-christmas-lottery-numbers ./helm/check-christmas-lottery-numbers \
   --set config.push_over_notification_token=$PUSH_OVER_NOTIFICATION_TOKEN \
@@ -164,6 +224,11 @@ Below are examples of how to use the chart:
   --set imageCredentials.password=<dockerhub_password> \
   --set imageCredentials.name=<dockhub_pull_secret_name> \
   --set-file numbers_to_check=<number_to_check_file_dir> \
+  --set-string config.notify="true" \
+  --set-string config.storeNotifications="true" \
+  --set config.mongodb.rootCredentials.username="user" \
+  --set config.mongodb.rootCredentials.password="password" \
+  --set config.mongodb.storage.className="standard" \
   -n <check-christmas-lottery-numbers-namespace-name>
   ```
 
@@ -200,3 +265,6 @@ A series of variables must be provided in order to carry out the execution of th
 
 [license-badge]: https://img.shields.io/github/license/xoanmm/check-christmas-lottery-numbers
 [license-link]: https://github.com/xoanmm/check-christmas-lottery-numbers/blob/master/LICENSE
+
+[coverage-badge]: https://sonarcloud.io/api/project_badges/measure?project=xoanmm_check-christmas-lottery-numbers&metric=coverage
+[coverage-link]: https://sonarcloud.io/dashboard?id=xoanmm_check-christmas-lottery-numbers

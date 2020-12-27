@@ -44,8 +44,8 @@ func convertStrResponseToLotteryDrawStatus(response string) (*LotteryDrawStatus,
 }
 
 // GetAPILotteryDrawStatus check the actual status of the lottery draw
-func GetAPILotteryDrawStatus(lotteryDrawResultsAPIURL string) (*LotteryDrawStatus, error) {
-	log.Println("Checking the status of the Christmas lottery draw")
+func GetAPILotteryDrawStatus(draw string, lotteryDrawResultsAPIURL string) (*LotteryDrawStatus, error) {
+	log.Printf("Checking the status of the %s lottery draw\n", draw)
 
 	res, err := requests.DoGetRequest(fmt.Sprintf("%s?s=1", lotteryDrawResultsAPIURL))
 	if err != nil {
@@ -111,12 +111,49 @@ func CheckNumber(lotteryDrawResultsAPIURL string, number string, bet int, origin
 	return numberCheckResult, nil
 }
 
-// isNecessaryNotify check if is necessary notify for each number result
-func isNecessaryNotify(finalPrize float64, notify bool) bool {
-	if finalPrize > 0 && notify {
-		return true
+func isAlreadyNotified(mongoHostURL string, mongoRootUsername string, mongoRootPassword string, draw string, year int, owner string, number string, prize float64, origin string) (*bool, error) {
+	ctx, mongoClient, _, err := notifications.ConnectToMongo(mongoHostURL, mongoRootUsername, mongoRootPassword)
+	if err != nil {
+		return nil, err
 	}
-	return false
+	notificationMongo := notifications.NotificationMongo{
+		Draw:     draw,
+		Year:     year,
+		Owner:    owner,
+		Number:   number,
+		Prize:    prize,
+		Origin:   origin,
+		Notified: true,
+	}
+	christmasLotteryCollection := notifications.GetMongoCollection(mongoClient, "lottery", draw)
+	exists, err := notifications.CheckNotificationExistsInMongoCollection(ctx, notificationMongo, christmasLotteryCollection)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return exists, nil
+}
+
+// isNecessaryNotify check if is necessary notify for each number result
+func isNecessaryNotify(finalPrize float64, notify bool, storeNotifications bool, mongoHostURL string, mongoRootUsername string, mongoRootPassword string, draw string, year int, owner string, number string, prize float64, origin string) (*bool, error) {
+	isNecessaryNotify := false
+	if finalPrize > 0 && notify {
+		if storeNotifications {
+			isAlreadyNotified, err := isAlreadyNotified(mongoHostURL, mongoRootUsername, mongoRootPassword, draw, year, owner, number, prize, origin)
+			if err != nil {
+				return nil, err
+			}
+			if !*isAlreadyNotified {
+				isNecessaryNotify = true
+				return &isNecessaryNotify, nil
+			}
+		} else {
+			isNecessaryNotify := true
+			return &isNecessaryNotify, nil
+		}
+	}
+	return &isNecessaryNotify, nil
 }
 
 // GetProbabilityOfWin calculate the probability to win a prize
@@ -133,7 +170,9 @@ func getFinalPrizeFromBet(bet int, premio int) float64 {
 }
 
 // CheckPersonsNumbers checks the prize for the numbers of a list of persons
-func CheckPersonsNumbers(lotteryDrawResultsAPIURL string, personsNumbersToCheck *PersonNumbersToCheck, notify bool) error {
+func CheckPersonsNumbers(lotteryDrawResultsAPIURL string, personsNumbersToCheck *PersonNumbersToCheck,
+	draw string, notify bool, storeNotifications bool, mongoHostURL string,
+	mongoRootUsername string, mongoRootPassword string, year int) error {
 
 	personsNumbersToCheckNum := len(personsNumbersToCheck.PersonsNumbers)
 	log.Printf("Numbers are going to be check from %d different owners\n", personsNumbersToCheckNum)
@@ -141,7 +180,7 @@ func CheckPersonsNumbers(lotteryDrawResultsAPIURL string, personsNumbersToCheck 
 		personNumbersToCheck := personsNumbersToCheck.PersonsNumbers[i]
 		personNumbersToCheckNum := len(personNumbersToCheck.Numbers)
 
-		err := checkPersonNumbers(lotteryDrawResultsAPIURL, personNumbersToCheck, personNumbersToCheckNum, notify)
+		err := checkPersonNumbers(lotteryDrawResultsAPIURL, personNumbersToCheck, personNumbersToCheckNum, draw, notify, storeNotifications, mongoHostURL, mongoRootUsername, mongoRootPassword, year)
 
 		if err != nil {
 			return err
@@ -152,7 +191,8 @@ func CheckPersonsNumbers(lotteryDrawResultsAPIURL string, personsNumbersToCheck 
 
 // checkPersonNumbers check the number for a specific person
 func checkPersonNumbers(lotteryDrawResultsAPIURL string, personNumbersToCheck PersonNumbers, personNumbersToCheckNum int,
-	notify bool) error {
+	draw string, notify bool, storeNotifications bool, mongoHostURL string, mongoRootUsername string, mongoRootPassword string, year int) error {
+
 	owner := personNumbersToCheck.Owner
 	probabilityOfWin := getProbabilityOfWin(personNumbersToCheckNum)
 
@@ -166,13 +206,23 @@ func checkPersonNumbers(lotteryDrawResultsAPIURL string, personNumbersToCheck Pe
 			return err
 		}
 		finalPrize := getFinalPrizeFromBet(bet, numberCheckResult.Premio)
-		log.Printf("Prize obtained for number %s with %d € bet and origin %s is %.2f€\n", number, bet, origin, finalPrize)
-		if isNecessaryNotify(finalPrize, notify) {
-			notificationResult, err := notifications.SendPushOverNotification(finalPrize, number, origin)
+		log.Printf("%s won %.2f€ in number %s with %d € bet and origin %s\n", owner, finalPrize, number, bet, origin)
+		isNecessaryNotify, err := isNecessaryNotify(finalPrize, notify, storeNotifications, mongoHostURL, mongoRootUsername, mongoRootPassword, draw, year, owner, number, finalPrize, origin)
+		if err != nil {
+			return err
+		}
+		if *isNecessaryNotify {
+			notificationResult, err := notifications.SendPushOverNotification(owner, finalPrize, number, origin)
 			if err != nil {
 				return err
 			}
 			log.Printf("Notification send correctly with id %s to PushOver App\n", notificationResult.Request)
+			if storeNotifications {
+				err = notifications.AddNotificationToMongo(mongoHostURL, mongoRootUsername, mongoRootPassword, draw, year, owner, number, finalPrize, origin)
+				if err != nil {
+					return err
+				}
+			}
 		}
 	}
 	return nil

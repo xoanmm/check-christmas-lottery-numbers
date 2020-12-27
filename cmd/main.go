@@ -9,17 +9,26 @@ import (
 	"time"
 )
 
-// lotteryDrawResultsAPIURL represents the URL of the API where the results of the
-// Christmas draw will be obtained
-const lotteryDrawResultsAPIURL = "http://api.elpais.com/ws/LoteriaNavidadPremiados"
-
 var date = time.Now().Format(time.RFC3339)
+var year = time.Now().Year()
 
 func main() {
 	cmd := buildCLI()
 	if err := cmd.Run(os.Args); err != nil {
 		log.Fatal(err)
 	}
+}
+
+func getCLINecessaryArgs(c *cli.Context) (string, bool, bool, string, string, string, string) {
+	fileNumbersToCheck, _ := filepath.Abs(c.String("file-numbers-to-check"))
+	notify := c.Bool("notify")
+	storeNotifications := c.Bool("store-notifications")
+	draw := c.String("draw")
+	mongoHostURL := c.String("mongoHost")
+	mongoRootUsername := c.String("mongoRootUsername")
+	mongoRootPassword := c.String("mongoRootPassword")
+
+	return fileNumbersToCheck, notify, storeNotifications, draw, mongoHostURL, mongoRootUsername, mongoRootPassword
 }
 
 // buildCLI creates a CLI app
@@ -45,18 +54,50 @@ func buildCLI() *cli.App {
 				Value:   "/tmp/numbers_to_check.json",
 				Aliases: []string{"f"},
 			},
+			&cli.StringFlag{
+				Name:    "draw",
+				Usage:   "Draw for which the numbers will be checked",
+				Value:   "",
+				Aliases: []string{"d"},
+			},
 			&cli.BoolFlag{
 				Name:    "notify",
 				Usage:   "Activate notifications through PushOver",
 				Value:   false,
 				Aliases: []string{"n"},
 			},
+			&cli.BoolFlag{
+				Name:    "store-notifications",
+				Usage:   "Activate notifications store in mongodb",
+				Value:   false,
+				Aliases: []string{"s"},
+			},
+			&cli.StringFlag{
+				Name:    "mongoHost",
+				Usage:   "Mongo Host URL used to store notifications",
+				Value:   "localhost:27017",
+				Aliases: []string{"m"},
+			},
+			&cli.StringFlag{
+				Name:    "mongoRootUsername",
+				Usage:   "Root username for mongo host",
+				Value:   "",
+				Aliases: []string{"u"},
+			},
+			&cli.StringFlag{
+				Name:    "mongoRootPassword",
+				Usage:   "Root password for mongo host",
+				Value:   "",
+				Aliases: []string{"p"},
+			},
 		},
 		Action: func(c *cli.Context) error {
-			fileNumbersToCheck, _ := filepath.Abs(c.String("file-numbers-to-check"))
-			notify := c.Bool("notify")
-
-			lotteryDrawStatus, err := results.GetAPILotteryDrawStatus(lotteryDrawResultsAPIURL)
+			fileNumbersToCheck, notify, storeNotifications, draw, mongoHostURL, mongoRootUsername, mongoRootPassword := getCLINecessaryArgs(c)
+			lotteryDrawAPIURL, err := results.GetDrawAPIURLToCheckNumbers(draw)
+			if err != nil {
+				return err
+			}
+			lotteryDrawStatus, err := results.GetAPILotteryDrawStatus(draw, *lotteryDrawAPIURL)
 			if err != nil {
 				return err
 			}
@@ -70,7 +111,7 @@ func buildCLI() *cli.App {
 				return err
 			}
 
-			err = results.CheckPersonsNumbers(lotteryDrawResultsAPIURL, personNumbers, notify)
+			err = results.CheckPersonsNumbers(*lotteryDrawAPIURL, personNumbers, draw, notify, storeNotifications, mongoHostURL, mongoRootUsername, mongoRootPassword, year)
 			if err != nil {
 				return err
 			}

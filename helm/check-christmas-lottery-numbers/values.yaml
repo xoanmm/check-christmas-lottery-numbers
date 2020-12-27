@@ -1,4 +1,4 @@
-# Default values for check-christmas-lottery-numbers.
+# Default values for check-cPUSH_OVER_NOTIFICATION_TOKENhristmas-lottery-numbers.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
@@ -21,7 +21,16 @@ nameOverride: ""
 fullnameOverride: ""
 
 config:
+  lotteryDraw: "christmas"
   push_over_notification_token: ""
   push_over_notification_user: ""
-  notify: true
+  notify: "true"
+  storeNotifications: "false"
   minutesSchedulePeriod: ""
+  mongodb:
+    rootCredentials:
+      username: ""
+      password: ""
+    storage:
+      className: ""
+      size: 512Mi

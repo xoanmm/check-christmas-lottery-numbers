@@ -15,7 +15,7 @@ jobs:
     strategy:
       matrix:
         go-version: [ 1.14.x ]
-        platform: [ macos-latest, ubuntu-latest, windows-latest ]
+        platform: [ macos-latest, ubuntu-latest ]
     runs-on: ${{ matrix.platform }}
     steps:
       - name: Install Go
@@ -26,6 +26,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Configure Docker
+        uses: docker-practice/actions-setup-docker@master
+
+      - name: Run MongoDB Container
+        if: ${{ matrix.platform == 'ubuntu-latest' }} || ${{ matrix.platform == 'macos-latest' }}
+        run: |
+          docker run --name mongo -d -e MONGO_INITDB_ROOT_USERNAME=${{ secrets.MONGO_INITDB_ROOT_USERNAME}} -e MONGO_INITDB_ROOT_PASSWORD=${{ secrets.MONGO_INITDB_ROOT_PASSWORD}} -p 27017:27017 mongo:4.2.8
+
       - name: Test
         run: |
           go test -coverprofile="${{ matrix.platform }}_coverage.out" -covermode=atomic -coverpkg=./... ./...
@@ -33,6 +41,8 @@ jobs:
         env:
           PUSH_OVER_NOTIFICATION_TOKEN: ${{ secrets.PUSH_OVER_NOTIFICATION_TOKEN }}
           PUSH_OVER_NOTIFICATION_USER: ${{ secrets.PUSH_OVER_NOTIFICATION_USER }}
+          MONGO_INITDB_ROOT_USERNAME: ${{ secrets.MONGO_INITDB_ROOT_USERNAME }}
+          MONGO_INITDB_ROOT_PASSWORD: ${{ secrets.MONGO_INITDB_ROOT_PASSWORD }}
       - name: Upload coverage report
         uses: actions/upload-artifact@v1
         with:

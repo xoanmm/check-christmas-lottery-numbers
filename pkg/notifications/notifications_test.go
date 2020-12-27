@@ -40,7 +40,7 @@ func TestSendPushOverNotification(t *testing.T) {
 		Request: "",
 	}
 
-	resultSendNofitication, err := SendPushOverNotification(finalPrize, number, origin)
+	resultSendNofitication, err := SendPushOverNotification(ownerToUseForTests, finalPrize, number, origin)
 	if err != nil {
 		log.Fatal(err)
 	}
