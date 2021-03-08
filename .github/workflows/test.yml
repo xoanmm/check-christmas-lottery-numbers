@@ -43,6 +43,11 @@ jobs:
           PUSH_OVER_NOTIFICATION_USER: ${{ secrets.PUSH_OVER_NOTIFICATION_USER }}
           MONGO_INITDB_ROOT_USERNAME: ${{ secrets.MONGO_INITDB_ROOT_USERNAME }}
           MONGO_INITDB_ROOT_PASSWORD: ${{ secrets.MONGO_INITDB_ROOT_PASSWORD }}
+      - name: "Upload overage to Codecov"
+        uses: codecov/codecov-action@v1
+        with:
+          fail_ci_if_error: true
+          
       - name: Upload coverage report
         uses: actions/upload-artifact@v1
         with:
