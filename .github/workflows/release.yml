@@ -55,13 +55,15 @@ jobs:
           echo ::set-output name=VERSION::$(cat semantic_release_version.txt)
           if [ "VERSION" = "" ]; then
             echo "::warning::No new version to release."
+          else
+            echo"::info::It's going to publish version $VERSION"
           fi
 
       - name: Run GoReleaser
         if: ${{ steps.get_version.outputs.VERSION != '' }}
         uses: goreleaser/goreleaser-action@v1
         with:
-          version: ${{ steps.get_version.outputs.VERSION }}
+          version: latest
           args: release --rm-dist
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
