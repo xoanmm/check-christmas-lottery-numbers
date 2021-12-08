@@ -6,6 +6,7 @@
   },
   "dependencies": {
     "@semantic-release/exec": "6.0.2",
+    "@semantic-release/git": "10.0.1",
     "@semantic-release/github": "8.0.2",
     "@semantic-release/release-notes-generator": "10.0.3",
     "semantic-release": "18.0.1"
@@ -24,6 +25,15 @@
           "verifyReleaseCmd": "./ci-utils/update_versions.sh ${nextRelease.version}",
           "prepareCmd": "echo ${nextRelease.version} > semantic_release_version.txt",
           "publishCmd": "helm package ./helm/check-christmas-lottery-numbers -d /tmp"
+        }
+      ],
+      [
+        "@semantic-release/git",
+        {
+          "assets": [
+            "helm/**/*"
+          ],
+          "message": "chore(release): ${nextRelease.version} \n\n${nextRelease.notes}"
         }
       ]
     ]
