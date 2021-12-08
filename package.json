@@ -23,15 +23,15 @@
         "@semantic-release/exec",
         {
           "verifyReleaseCmd": "./ci-utils/update_versions.sh ${nextRelease.version}",
-          "prepareCmd": "echo ${nextRelease.version} > semantic_release_version.txt",
-          "publishCmd": "helm package ./helm/check-christmas-lottery-numbers -d /tmp"
+          "prepareCmd": "echo ${nextRelease.version} > semantic_release_version.txt"
         }
       ],
       [
         "@semantic-release/git",
         {
           "assets": [
-            "/tmp/"
+            "helm/**/*",
+            "/tmp/check-christmas-lottery-numbers-*.tgz"
           ],
           "message": "chore(release): ${nextRelease.version} \n\n${nextRelease.notes}"
         }
