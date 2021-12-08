@@ -115,7 +115,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: https://uploads.github.com/repos/xoanmallon/check-christmas-lottery-numbers/releases/${{ steps.get-release-info.outputs.id }}/assets?name=check-christmas-lottery-numbers-${{ steps.get_version.outputs.VERSION }}.tgz
+          upload_url: ${{ steps.get-release-info.outputs.assets_url }}
           asset_path: /tmp/check-christmas-lottery-numbers-${{ steps.get_version.outputs.VERSION }}.tgz
           asset_name: check-christmas-lottery-numbers-${{ steps.get_version.outputs.VERSION }}.tgz
           asset_content_type: application/gzip
