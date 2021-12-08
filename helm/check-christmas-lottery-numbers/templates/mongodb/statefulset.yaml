@@ -7,7 +7,7 @@ metadata:
     app: check-christmas-lottery-numbers-mongo
 spec:
   replicas: 1
-  serviceName: kre-mongo
+  serviceName: check-christmas-lottery-numbers-mongo
   selector:
     matchLabels:
       app: check-christmas-lottery-numbers-mongo
@@ -17,7 +17,7 @@ spec:
         app: check-christmas-lottery-numbers-mongo
     spec:
       containers:
-        - name: kre-mongo
+        - name: mongo
           image: mongo:4.2.8
           imagePullPolicy: IfNotPresent
           envFrom:

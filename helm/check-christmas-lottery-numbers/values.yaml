@@ -3,23 +3,19 @@
 # Declare variables to be passed into your templates.
 
 replicaCount: 1
-
 image:
   repository: xoanmallon/check-christmas-lottery-numbers
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
-  tag: ""
-
+  tag: 1.1.1
 imageCredentials:
   url: ""
   username: ""
   password: ""
   name: ""
-
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
-
 config:
   lotteryDraw: "christmas"
   push_over_notification_token: ""

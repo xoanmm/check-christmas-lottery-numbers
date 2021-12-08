@@ -1,12 +1,15 @@
 {
   "name": "check-christmas-lottery-numbers",
+  "version": "1.1.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/xoanmm/check-christmas-lottery-numbers.git"
   },
   "dependencies": {
-    "@semantic-release/exec": "5.0.0",
-    "semantic-release": "17.2.3"
+    "@semantic-release/changelog": "6.0.1",
+    "@semantic-release/exec": "6.0.2",
+    "@semantic-release/git": "10.0.1",
+    "semantic-release": "18.0.1"
   },
   "release": {
     "branches": [
@@ -18,7 +21,24 @@
       [
         "@semantic-release/exec",
         {
-          "verifyReleaseCmd": "echo ${nextRelease.version} > release_version.txt"
+          "prepare": "./ci-utils/update_versions.sh ${nextRelease.version}"
+        }
+      ],
+      [
+        "@semantic-release/changelog",
+        {
+          "changelogFile": "CHANGELOG.md"
+        }
+      ],
+      [
+        "@semantic-release/git",
+        {
+          "assets": [
+            "helm/**/*",
+            "package.json",
+            "CHANGELOG.json"
+          ],
+          "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
         }
       ]
     ]
