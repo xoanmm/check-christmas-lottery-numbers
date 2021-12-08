@@ -22,16 +22,16 @@
       "@semantic-release/release-notes-generator",
       "@semantic-release/github",
       [
+        "@semantic-release/changelog",
+        {
+          "changelogFile": "CHANGELOG.md"
+        }
+      ],
+      [
         "@semantic-release/exec",
         {
           "prepareCmd": "./ci-utils/update_versions.sh ${nextRelease.version}",
           "publishCmd": "echo ${nextRelease.version} > semantic_release_version.txt"
-        }
-      ],
-      [
-        "@semantic-release/changelog",
-        {
-          "changelogFile": "CHANGELOG.md"
         }
       ],
       [
