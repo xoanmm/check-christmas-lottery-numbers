@@ -6,7 +6,6 @@
     "url": "https://github.com/xoanmm/check-christmas-lottery-numbers.git"
   },
   "dependencies": {
-    "@semantic-release/changelog": "6.0.1",
     "@semantic-release/exec": "6.0.2",
     "@semantic-release/git": "10.0.1",
     "@semantic-release/github": "8.0.2",
@@ -21,12 +20,6 @@
       "@semantic-release/commit-analyzer",
       "@semantic-release/release-notes-generator",
       "@semantic-release/github",
-      [
-        "@semantic-release/changelog",
-        {
-          "changelogFile": "CHANGELOG.md"
-        }
-      ],
       [
         "@semantic-release/exec",
         {
