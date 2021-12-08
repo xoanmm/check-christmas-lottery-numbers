@@ -107,8 +107,8 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           tag_name: "v${{ steps.get_version.outputs.VERSION }}"
 
-      - name: Check file exists
-        run: ls -lh /tmp/check-christmas-lottery-numbers-${{ steps.get_version.outputs.VERSION }}.tgz
+      - name: Package helm chart
+        run: helm package ./helm/check-christmas-lottery-numbers -d .
 
       # Upload helm chart tgz file to GitHub release
       - name: Upload helm chart tgz file
@@ -119,6 +119,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.get-release-info.outputs.assets_url }}?name=check-christmas-lottery-numbers-${{ steps.get_version.outputs.VERSION }}.tgz
-          asset_path: /tmp/check-christmas-lottery-numbers-${{ steps.get_version.outputs.VERSION }}.tgz
+          asset_path: check-christmas-lottery-numbers-${{ steps.get_version.outputs.VERSION }}.tgz
           asset_name: check-christmas-lottery-numbers-${{ steps.get_version.outputs.VERSION }}.tgz
           asset_content_type: application/gzip

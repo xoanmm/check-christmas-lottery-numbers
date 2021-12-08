@@ -13,13 +13,8 @@ function update_version_helm_chart_files() {
   yq w -i helm/check-christmas-lottery-numbers/values.yaml "image.tag" "${NEXT_RELEASE_VERSION}"
 }
 
-function package_helm_chart() {
-  helm package ./helm/check-christmas-lottery-numbers -d /tmp
-}
-
 function update_versions() {
   update_version_helm_chart_files
-  package_helm_chart
 }
 
 update_versions
