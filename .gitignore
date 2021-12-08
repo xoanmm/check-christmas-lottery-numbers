@@ -23,3 +23,9 @@
 # Environments variables
 .env
 env
+
+# Node modules
+node_modules/
+
+# semantic-release file to get version
+semantic_release_version.txt
