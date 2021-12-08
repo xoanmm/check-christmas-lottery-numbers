@@ -105,6 +105,8 @@ jobs:
         uses: bruceadams/get-release@v1.2.3
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.get_version.outputs.VERSION }}
 
       # Upload helm chart tgz file to GitHub release
       - name: Upload Deployment helm chart tgz file
