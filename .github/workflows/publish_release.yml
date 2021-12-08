@@ -4,6 +4,9 @@ on:
   push:
     tags:
       - 'v*'
+  create:
+    tags:
+      - 'v*'
 
 jobs:
   publish-version:

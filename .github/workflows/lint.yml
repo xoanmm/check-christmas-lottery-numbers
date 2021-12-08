@@ -9,7 +9,7 @@ on:
 name: Lint
 jobs:
   lint:
-    if: "!contains(github.event.commits[0].message, 'chore(release):')"
+    if: "${{ !contains(github.event.commits[0].message, 'chore(release):') }}"
     runs-on: ubuntu-latest
     steps:
       - name: Install Go

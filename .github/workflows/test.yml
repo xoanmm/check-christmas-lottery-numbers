@@ -11,7 +11,7 @@ on:
 name: Test
 jobs:
   tests:
-    if: "${{ github.event.workflow_run.conclusion == 'success' }} && if: !contains(github.event.commits[0].message, 'chore(release):')"
+    if: "${{ github.event.workflow_run.conclusion == 'success' && !contains(github.event.commits[0].message, 'chore(release):') }}"
     strategy:
       matrix:
         go-version: [ 1.14.x ]
