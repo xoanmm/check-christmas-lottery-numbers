@@ -32,7 +32,9 @@ jobs:
       - name: Run MongoDB Container
         if: ${{ matrix.platform == 'ubuntu-latest' }} || ${{ matrix.platform == 'macos-latest' }}
         run: |
-          docker run --name mongo -d -e MONGO_INITDB_ROOT_USERNAME=${{ secrets.MONGO_INITDB_ROOT_USERNAME}} -e MONGO_INITDB_ROOT_PASSWORD=${{ secrets.MONGO_INITDB_ROOT_PASSWORD}} -p 27017:27017 mongo:4.2.8
+          docker run --name mongo -d -e MONGO_INITDB_ROOT_USERNAME=${{ secrets.MONGO_INITDB_ROOT_USERNAME}} -e MONGO_INITDB_ROOT_PASSWORD=${{ secrets.MONGO_INITDB_ROOT_PASSWORD}} -p 27017:27017 mongo:${{ env.MONGODB_VERSION }}
+        env:
+          MONGODB_VERSION: 5.0.5
 
       - name: Test
         run: |
