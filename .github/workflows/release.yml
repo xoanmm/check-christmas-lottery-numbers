@@ -10,7 +10,7 @@ on:
 
 jobs:
   semantic-release:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: "${{ github.event.workflow_run.conclusion == 'success' }} && !contains(github.event.commits[0].message, 'chore(release):')"
     name: Semantic Release
     runs-on: ubuntu-latest
     steps:
