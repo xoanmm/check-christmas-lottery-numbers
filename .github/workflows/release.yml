@@ -107,15 +107,15 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           tag_name: "v${{ steps.get_version.outputs.VERSION }}"
 
-#      # Upload helm chart tgz file to GitHub release
-#      - name: Upload Deployment helm chart tgz file
-#        if: ${{ steps.get_version.outputs.VERSION != '' }}
-#        id: upload-helm-chart-tgz
-#        uses: actions/upload-release-asset@v1
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#        with:
-#          upload_url: https://uploads.github.com/repos/xoanmallon/check-christmas-lottery-numbers/releases/${{ steps.get-release-info.outputs.id }}/assets?name=check-christmas-lottery-numbers-${{ steps.get_version.outputs.VERSION }}.tgz
-#          asset_path: /tmp/check-christmas-lottery-numbers-${{ steps.get_version.outputs.VERSION }}.tgz
-#          asset_name: check-christmas-lottery-numbers-${{ steps.get_version.outputs.VERSION }}.tgz
-#          asset_content_type: application/gzip
+      # Upload helm chart tgz file to GitHub release
+      - name: Upload helm chart tgz file
+        if: ${{ steps.get_version.outputs.VERSION != '' }}
+        id: upload-helm-chart-tgz
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: https://uploads.github.com/repos/xoanmallon/check-christmas-lottery-numbers/releases/${{ steps.get-release-info.outputs.id }}/assets?name=check-christmas-lottery-numbers-${{ steps.get_version.outputs.VERSION }}.tgz
+          asset_path: /tmp/check-christmas-lottery-numbers-${{ steps.get_version.outputs.VERSION }}.tgz
+          asset_name: check-christmas-lottery-numbers-${{ steps.get_version.outputs.VERSION }}.tgz
+          asset_content_type: application/gzip

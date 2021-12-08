@@ -30,8 +30,7 @@
         "@semantic-release/git",
         {
           "assets": [
-            "helm/**/*",
-            "/tmp/check-christmas-lottery-numbers-${nextRelease.version}.tgz"
+            "helm/**/*"
           ],
           "message": "chore(release): ${nextRelease.version} \n\n${nextRelease.notes}"
         }
