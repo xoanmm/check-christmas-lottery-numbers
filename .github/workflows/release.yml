@@ -35,6 +35,16 @@ jobs:
         env:
           YQ_VERSION: "3.4.1"
 
+      - name: Setup helm
+        run: |
+          wget -O /tmp/helm-v${HELM_VERSION}-linux-amd64.tar.gz https://get.helm.sh/helm-v${HELM_VERSION}-linux-amd64.tar.gz
+          tar -zxvf /tmp/helm-v${HELM_VERSION}-linux-amd64.tar.gz
+          sudo mv /tmp/linux-amd64/helm /usr/local/bin/helm
+          sudo rm -rf /tmp/helm-v${HELM_VERSION}-linux-amd64.tar.gz /tmp/linux-amd64
+          sudo chmod +x /usr/local/bin/helm
+        env:
+          HELM_VERSION: "3.7.1"
+
       - name: Create empty semantic_release_version.txt file
         run: touch semantic_release_version.txt
 

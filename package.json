@@ -22,8 +22,9 @@
       [
         "@semantic-release/exec",
         {
-          "prepareCmd": "./ci-utils/update_versions.sh ${nextRelease.version}",
-          "publishCmd": "echo ${nextRelease.version} > semantic_release_version.txt"
+          "verifyReleaseCmd": "./ci-utils/update_versions.sh ${nextRelease.version}",
+          "prepareCmd": "echo ${nextRelease.version} > semantic_release_version.txt",
+          "publishCmd": "helm package ./helm/check-christmas-lottery-numbers -d /tmp"
         }
       ],
       [
@@ -32,7 +33,8 @@
           "assets": [
             "helm/**/*",
             "package.json",
-            "CHANGELOG.json"
+            "CHANGELOG.json",
+            "/tmp/check-christmas-lottery-numbers-*.tgz"
           ],
           "message": "chore(release): ${nextRelease.version} \n\n${nextRelease.notes}"
         }
