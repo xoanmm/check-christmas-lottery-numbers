@@ -100,11 +100,11 @@ jobs:
         uses: ./.github/actions/goreleaser
 
       # Get release information to determine id of the current release
-      - name: Get Release
+      - name: Get release info
         id: get-release-info
-        uses: bruceadams/get-release@v1.2.3
+        uses: kaliber5/action-get-release@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ steps.get_version.outputs.VERSION }}
 
