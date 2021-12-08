@@ -105,7 +105,7 @@ jobs:
         uses: kaliber5/action-get-release@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          tag_name: ${{ steps.get_version.outputs.VERSION }}
+          tag_name: "v${{ steps.get_version.outputs.VERSION }}"
 
 #      # Upload helm chart tgz file to GitHub release
 #      - name: Upload Deployment helm chart tgz file
