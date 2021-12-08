@@ -1,12 +1,13 @@
 name: Publish release
 
+# Controls when the action will run.
 on:
-  push:
-    tags:
-      - 'v*'
+  # Triggers the workflow on push or pull request events but only for the main branch
+  create:
 
 jobs:
   publish-version:
+    if: ${{ startsWith(github.ref, 'refs/tags/v') }}
     name: PublishVersion
     runs-on: ubuntu-latest
     steps:
@@ -21,10 +22,14 @@ jobs:
         with:
           go-version: 1.14
 
+      - name: Get the version
+        id: get_version
+        run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/v}
+
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v1
         with:
-          version: latest
+          version: ${{ steps.get_version.outputs.VERSION }}
           args: release --rm-dist
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -43,7 +48,7 @@ jobs:
           context: .
           push: true
           tags: |
-            xoanmallon/check-christmas-lottery-numbers:${{ github.GITHUB_REF_NAME }}
+            xoanmallon/check-christmas-lottery-numbers:${{ steps.get_version.outputs.VERSION }}
             xoanmallon/check-christmas-lottery-numbers:latest
 
       - name: Run GoReleaser
