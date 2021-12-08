@@ -21,7 +21,7 @@
       [
         "@semantic-release/exec",
         {
-          "prepare": "./ci-utils/update_versions.sh ${nextRelease.version}"
+          "prepareCmds": "./ci-utils/update_versions.sh ${nextRelease.version}"
         }
       ],
       [
