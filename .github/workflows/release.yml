@@ -45,6 +45,15 @@ jobs:
           sudo chmod +x /usr/local/bin/helm
         env:
           HELM_VERSION: "3.7.1"
+      
+      - name: Setup helm-docs
+        uses: giantswarm/install-binary-action@v1.0.0
+        with:
+          binary: "helm-docs"
+          version: "1.5.0"
+          download_url: "https://github.com/norwoodj/helm-docs/releases/download/v${version}/helm-docs_${version}_Linux_x86_64.tar.gz"
+          tarball_binary_path: "*${binary}"
+          smoke_test: "${binary} --version"
 
       - name: Create empty semantic_release_version.txt file
         run: touch semantic_release_version.txt

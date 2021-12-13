@@ -12,7 +12,7 @@ import (
 const numberToUseForCheck = "74730"
 const correctLotteryDrawResultsAPIURL = "http://api.elpais.com/ws/LoteriaNavidadPremiados"
 const inCorrectLotteryDrawResultsAPIURLForJSONUnmarshall = "http://api.elpais.com/ws/LoteriaNavidadPremiadoss"
-const actualLotteryDrawStatusCode = 4
+const actualLotteryDrawStatusCode = 1
 const mongoCollectionForTests = "christmas"
 
 func TestMain(m *testing.M) {
@@ -30,7 +30,6 @@ func TestGetAPILotteryDrawStatus(t *testing.T) {
 	expectedResultStatus := actualLotteryDrawStatusCode
 	expectedResultError := 0
 	expectedDrawStatus := NewLotteryDrawStatus(expectedResultStatus, expectedResultError)
-
 	if !(cmp.Equal(drawStatus, expectedDrawStatus)) {
 		log.Fatal("drawStatus and expectedResultStatus for GetAPILotteryDrawStatus are not equal")
 	}
