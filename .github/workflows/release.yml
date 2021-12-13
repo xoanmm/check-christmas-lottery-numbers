@@ -41,7 +41,6 @@ jobs:
           wget -qO /tmp/helm/helm-v${HELM_VERSION}-linux-amd64.tar.gz https://get.helm.sh/helm-v${HELM_VERSION}-linux-amd64.tar.gz
           tar -xvf /tmp/helm/helm-v${HELM_VERSION}-linux-amd64.tar.gz -C /tmp/helm/
           sudo mv /tmp/helm/linux-amd64/helm /usr/local/bin/helm
-          sudo rm -rf /tmp/helm/
           sudo chmod +x /usr/local/bin/helm
         env:
           HELM_VERSION: "3.7.1"
@@ -52,7 +51,6 @@ jobs:
           wget -qO /tmp/helm-docs/helm-docs_${HELM_DOCS_VERSION}_Linux_x86_64.tar.gz https://github.com/norwoodj/helm-docs/releases/download/v${HELM_DOCS_VERSION}/helm-docs_${HELM_DOCS_VERSION}_Linux_x86_64.tar.gz
           tar -xf /tmp/helm-docs/helm-docs_${HELM_DOCS_VERSION}_Linux_x86_64.tar.gz -C /tmp/helm-docs
           sudo mv /tmp/helm-docs/helm-docs /usr/local/bin/helm-docs
-          sudo rm -rf /tmp/helm-docs
           sudo chmod +x /usr/local/bin/helm-docs
         env:
           HELM_DOCS_VERSION: "1.5.0"
@@ -70,6 +68,16 @@ jobs:
         id: get_version
         run: |
           echo ::set-output name=VERSION::$(cat semantic_release_version.txt)
+
+      - name: Package helm chart
+        if: ${{ steps.get_version.outputs.VERSION != '' }}
+        run: helm package ./helm/check-christmas-lottery-numbers -d .
+
+      - name: Upload helm package chart with new version
+        uses: actions/upload-artifact@v2
+        with:
+          name: helm_package_${{ steps.get_version.outputs.VERSION }}
+          path: check-christmas-lottery-numbers-${{ steps.get_version.outputs.VERSION }}.tgz
 
       - name: Set up Go
         if: ${{ steps.get_version.outputs.VERSION != '' }}
@@ -95,7 +103,8 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-
+      
+      # Push image to Docker Hub using version from semantic-release
       - name: Push to Docker Hub
         if: ${{ steps.get_version.outputs.VERSION != '' }}
         uses: docker/build-push-action@v2
@@ -114,12 +123,25 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           tag_name: "v${{ steps.get_version.outputs.VERSION }}"
 
-      - name: Package helm chart
-        run: helm package ./helm/check-christmas-lottery-numbers -d .
+  publish-version:
+    if: "${{ github.event.workflow_run.conclusion == 'success' && steps.get_version.outputs.VERSION != '' }}"
+    name: PublishVersion
+    runs-on: ubuntu-latest
+    needs: semantic-release
+    steps:
+
+      - name: Download helm package
+        uses: actions/download-artifact@v2
+        with:
+          name: helm_package_${{ steps.get_version.outputs.VERSION }}
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
 
       # Upload helm chart tgz file to GitHub release
       - name: Upload helm chart tgz file
-        if: ${{ steps.get_version.outputs.VERSION != '' }}
         id: upload-helm-chart-tgz
         uses: actions/upload-release-asset@v1
         env:
