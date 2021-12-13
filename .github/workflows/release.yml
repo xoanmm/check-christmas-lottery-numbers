@@ -71,14 +71,14 @@ jobs:
 
       - name: Package helm chart
         if: ${{ steps.get_version.outputs.VERSION != '' }}
-        run: helm package ./helm/check-christmas-lottery-numbers -d .
+        run: helm package ./helm/check-christmas-lottery-numbers -d /tmp
 
       - name: Upload helm package chart with new version
         if: ${{ steps.get_version.outputs.VERSION != '' }}
         uses: actions/upload-artifact@v2
         with:
           name: helm_package_${{ steps.get_version.outputs.VERSION }}
-          path: check-christmas-lottery-numbers-${{ steps.get_version.outputs.VERSION }}.tgz
+          path: /tmp/check-christmas-lottery-numbers-${{ steps.get_version.outputs.VERSION }}.tgz
 
       - name: Set up Go
         if: ${{ steps.get_version.outputs.VERSION != '' }}
@@ -124,11 +124,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: semantic-release
     steps:
-      - name: Download helm package
-        uses: actions/download-artifact@v2
-        with:
-          name: helm_package_${{ needs.semantic-release.outputs.version }}
-
       - name: Checkout code
         uses: actions/checkout@v2
         with:
@@ -141,6 +136,12 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           tag_name: "v${{ steps.get_version.outputs.VERSION }}"
+        
+      # Download helm chart package to upload as release asset
+      - name: Download helm package
+        uses: actions/download-artifact@v2
+        with:
+          name: helm_package_${{ needs.semantic-release.outputs.version }}
   
       # Upload helm chart tgz file to GitHub release
       - name: Upload helm chart tgz file
