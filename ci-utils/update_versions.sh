@@ -13,8 +13,14 @@ function update_version_helm_chart_files() {
   yq w -i helm/check-christmas-lottery-numbers/values.yaml "image.tag" "${NEXT_RELEASE_VERSION}"
 }
 
+function update_helm_docs() {
+  echo "It's going to update README.md with helm-docs"
+  helm-docs -c helm/check-christmas-lottery-numbers/
+}
+
 function update_versions() {
   update_version_helm_chart_files
+  update_helm_docs
 }
 
 update_versions
