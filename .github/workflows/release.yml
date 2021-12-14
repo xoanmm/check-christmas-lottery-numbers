@@ -96,10 +96,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
         with:
-          fetch-depth: 1
-
-      - name: Unshallow
-        run: git fetch --prune --unshallow --tags
+          fetch-depth: 0
       
       - name: Set up Go
         uses: actions/setup-go@v2
