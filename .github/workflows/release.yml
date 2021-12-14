@@ -97,9 +97,6 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
-
-      - name: Unshallow
-        run: git fetch --prune --unshallow
       
       - name: Set up Go
         uses: actions/setup-go@v2
@@ -110,9 +107,10 @@ jobs:
         uses: goreleaser/goreleaser-action@v1
         with:
           version: latest
-          args: release --rm-dist
+          args: release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GORELEASER_CURRENT_TAG: ${{ env.VERSION }}
 
       - uses: docker/setup-buildx-action@v1
 
