@@ -1,24 +1,17 @@
-
-# Start from the latest golang base image
-FROM golang:1.14
+FROM golang:1.14-alpine3.13 as builder
 
 # Add Maintainer Info
 LABEL maintainer="Xoan Mallon <xoanmallon@gmail.com>"
 
-# Set the Current Working Directory inside the container
-WORKDIR /app
-
-# Copy go mod and sum files
-COPY go.mod go.sum ./
-
-# Download all dependencies. Dependencies will be cached if the go.mod and go.sum files are not changed
-RUN go mod download
-
-# Copy the source from the current directory to the Working Directory inside the container
+RUN apk --no-cache add git
+WORKDIR /go/src/build
 COPY . .
+RUN export CGO_ENABLED=0 \
+    && mkdir -p dist \
+    && go mod vendor \
+    && go build -o dist/check-christmas-lottery-numbers ./cmd
 
-# Build the Go app
-RUN go build -o check-christmas-lottery-numbers ./cmd
+FROM alpine:3.13
+COPY --from=builder /go/src/build/dist/ .
 
-# Command to run the executable
-CMD ["./check-christmas-lottery-numbers"]
+ENTRYPOINT ["./check-christmas-lottery-numbers"]

@@ -114,7 +114,7 @@ jobs:
       
       - name: Test DOCKER_IMAGE_REGISTRY and VERSION values
         run: |
-          echo "Docker image is going to be pushed to registry ${{ env.DOCKER_IMAGE_REGISTRY }} with version ${{ env.VERSION }}
+          echo "Docker image is going to be pushed to registry ${{ env.DOCKER_IMAGE_REGISTRY }} with version ${{ env.VERSION }}"
 
       - name: Log in to the Container registry
         uses: docker/login-action@v1
