@@ -71,9 +71,21 @@ jobs:
       - name: Get the version
         id: get_version
         run: |
-          echo ::set-output name=VERSION::$(cat semantic_release_version.txt)
+          echo VERSION=$(cat semantic_release_version.txt) >> $GITHUB_ENV
+
+
+      - name: Package helm chart with new version
+        if: ${{ env.VERSION != '' }}
+        run: helm package ./helm/check-christmas-lottery-numbers -d /tmp
+
+      - name: Upload helm package chart with new version
+        if: ${{ env.VERSION != '' }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: helm_package_${{ env.VERSION }}
+          path: /tmp/check-christmas-lottery-numbers-${{ env.VERSION }}.tgz
     outputs:
-      version: ${{ steps.get_version.outputs.VERSION }}
+      version: ${{ env.VERSION }}
 
   publish-version:
     if: "${{ github.event.workflow_run.conclusion == 'success' && needs.semantic-release.outputs.version != '' }}"
@@ -84,7 +96,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
         with:
-          fetch-depth: 0
+          fetch-depth: 1
+
+      - name: Unshallow
+        run: git fetch --prune --unshallow
       
       - name: Set up Go
         uses: actions/setup-go@v2
@@ -140,8 +155,11 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           tag_name: "v${{ env.VERSION}}"
 
-      - name: Package helm chart
-        run: helm package ./helm/check-christmas-lottery-numbers -d .
+      # Download helm chart package to upload as release asset
+      - name: Download helm package
+        uses: actions/download-artifact@v2
+        with:
+          name: helm_package_${{ env.VERSION }}
 
       # Upload helm chart tgz file to GitHub release assets associated with version
       - name: Upload helm chart tgz file
