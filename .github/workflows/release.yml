@@ -110,7 +110,7 @@ jobs:
       - name: Set Docker Image Registry and Version ENV Variables
         run: |
           echo DOCKER_IMAGE_REGISTRY=$(echo "${{ env.REGISTRY}}/${{ env.IMAGE_NAME }}" | tr '[:upper:]' '[:lower:]') >> $GITHUB_ENV
-          echo VERSION=${{ steps.get_version.outputs.VERSION }} >> $GITHUB_ENV
+          echo VERSION=${{ needs.semantic-release.outputs.version }} >> $GITHUB_ENV
       
       - name: Test DOCKER_IMAGE_REGISTRY and VERSION values
         run: |
@@ -142,15 +142,15 @@ jobs:
 
       - name: Package helm chart
         run: helm package ./helm/check-christmas-lottery-numbers -d .
-  
-      # Upload helm chart tgz file to GitHub release assets
+
+      # Upload helm chart tgz file to GitHub release assets associated with version
       - name: Upload helm chart tgz file
         id: upload-helm-chart-tgz
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: https://uploads.github.com/repos/xoanmm/check-christmas-lottery-numbers/releases/${{ steps.get-release-info.outputs.id }}/assets?name=check-christmas-lottery-numbers-${{ needs.semantic-release.outputs.version }}.tgz
-          asset_path: ./check-christmas-lottery-numbers-${{ needs.semantic-release.outputs.version }}.tgz
-          asset_name: check-christmas-lottery-numbers-${{ needs.semantic-release.outputs.version }}.tgz
+          upload_url: https://uploads.github.com/repos/xoanmm/check-christmas-lottery-numbers/releases/${{ steps.get-release-info.outputs.id }}/assets?name=check-christmas-lottery-numbers-${{ env.VERSION }}.tgz
+          asset_path: ./check-christmas-lottery-numbers-${{ env.VERSION }}.tgz
+          asset_name: check-christmas-lottery-numbers-${{ env.VERSION }}.tgz
           asset_content_type: application/gzip
