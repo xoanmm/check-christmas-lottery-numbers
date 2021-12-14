@@ -1,6 +1,6 @@
 # check-christmas-lottery-numbers
 
-![Version: 1.1.46](https://img.shields.io/badge/Version-1.1.46-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.1.46](https://img.shields.io/badge/AppVersion-1.1.46-informational?style=flat-square)
+![Version: 1.1.47](https://img.shields.io/badge/Version-1.1.47-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.1.47](https://img.shields.io/badge/AppVersion-1.1.47-informational?style=flat-square)
 
 A Helm chart for Kubernetes
 
@@ -20,8 +20,8 @@ A Helm chart for Kubernetes
 | config.storeNotifications | string | `"false"` |  |
 | fullnameOverride | string | `""` |  |
 | image.pullPolicy | string | `"Always"` |  |
-| image.repository | string | `"xoanmallon/check-christmas-lottery-numbers"` |  |
-| image.tag | string | `"1.1.46"` |  |
+| image.repository | string | `"ghcr.io/xoanmm/check-christmas-lottery-numbers"` |  |
+| image.tag | string | `"1.1.47"` |  |
 | imageCredentials.name | string | `""` |  |
 | imageCredentials.password | string | `""` |  |
 | imageCredentials.url | string | `""` |  |
