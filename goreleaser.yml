@@ -67,7 +67,7 @@ docker_manifests:
     image_templates:
     - xoanmallon/check-christmas-lottery-numbers:{{ trimprefix .Tag "v" }}-amd64
     - xoanmallon/check-christmas-lottery-numbers:{{ trimprefix .Tag "v" }}-arm64
-  - name_template: xoanmm/check-christmas-lottery-numbers:latest
+  - name_template: xoanmmallon/check-christmas-lottery-numbers:latest
     image_templates:
     - xoanmallon/check-christmas-lottery-numbers:{{ trimprefix .Tag "v" }}-amd64
     - xoanmallon/check-christmas-lottery-numbers:{{ trimprefix .Tag "v" }}-arm64
