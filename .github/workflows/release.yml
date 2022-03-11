@@ -17,6 +17,8 @@ jobs:
     if: "${{ github.event.workflow_run.conclusion == 'success' && !contains(github.event.commits[0].message, 'chore(release):') }}"
     name: Semantic Release
     runs-on: ubuntu-latest
+    env:
+      DOCKER_CLI_EXPERIMENTAL: "enabled"
     steps:
 
       - name: Checkout code
@@ -31,6 +33,17 @@ jobs:
 
       - name: Install dependencies
         run: npm install
+
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.14
+
+      - name: Configure qemu
+        uses: docker/setup-qemu-action@v1
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
 
       - name: Setup yq
         run: |
@@ -72,6 +85,19 @@ jobs:
         id: get_version
         run: |
           echo VERSION=$(cat semantic_release_version.txt) >> $GITHUB_ENV
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Login to GHCR Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ${{ env.GHCR_REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       
       - name: Run GoReleaser
         if: ${{ env.VERSION != '' }}
@@ -110,50 +136,6 @@ jobs:
         uses: actions/setup-go@v2
         with:
           go-version: 1.14
-
-      - uses: docker/setup-buildx-action@v1
-
-      - name: Set Docker Image Registry and Version ENV Variables
-        run: |
-          echo DOCKER_IMAGE_GHCR_REGISTRY=$(echo "${{ env.GHCR_REGISTRY}}/${{ github.repository }}" | tr '[:upper:]' '[:lower:]') >> $GITHUB_ENV
-          echo DOCKER_HUB_IMAGE_REGISTRY=$(echo "xoanmallon/${{ env.IMAGE_NAME }}") >> $GITHUB_ENV
-          echo VERSION=${{ needs.semantic-release.outputs.version }} >> $GITHUB_ENV
-      
-      - name: Test DOCKER_IMAGE_GHCR_REGISTRY and VERSION values
-        run: |
-          echo "Docker image is going to be pushed to registry ${{ env.DOCKER_IMAGE_GHCR_REGISTRY }} with version ${{ env.VERSION }}"
-
-      - name: Docker meta
-        id: meta
-        uses: docker/metadata-action@v3
-        with:
-          images: |
-            ${{ env.DOCKER_HUB_IMAGE_REGISTRY }}
-            ${{ env.DOCKER_IMAGE_GHCR_REGISTRY }}
-          tags: |
-            latest
-            type=semver,pattern={{version}},value=${{ env.VERSION }}
-
-      - name: Login to DockerHub
-        uses: docker/login-action@v1
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Login to GHCR Registry
-        uses: docker/login-action@v1
-        with:
-          registry: ${{ env.GHCR_REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v2
-        with:
-          context: .
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
       
       # Get release information to determine id of the current release
       - name: Get release info

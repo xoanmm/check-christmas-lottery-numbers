@@ -43,3 +43,38 @@ nfpms:
     homepage: https://github.com/xoanmm/check-christmas-lottery-numbers
     maintainer: xoanmmm <xoanmallon@gmail.com>
     description: CLI that checks the lottery numbers provided through a file and notifies those that have been awarded using pushOver
+
+dockers:
+  - image_templates:
+    - xoanmallon/check-christmas-lottery-numbers:{{ trimprefix .Tag "v" }}-amd64
+    - ghcr.io/xoanmm/check-christmas-lottery-numbers:{{ trimprefix .Tag "v" }}-amd64
+    goarch: amd64
+    dockerfile: Dockerfile
+    use: buildx
+    build_flag_templates:
+    - --platform=linux/amd64
+  - image_templates:
+    - xoanmallon/check-christmas-lottery-numbers:{{ trimprefix .Tag "v" }}-arm64
+    - ghcr.io/xoanmm/check-christmas-lottery-numbers:{{ trimprefix .Tag "v" }}-arm64
+    goarch: arm64
+    dockerfile: Dockerfile
+    use: buildx
+    build_flag_templates:
+    - --platform=linux/arm64/v8
+docker_manifests:
+  - name_template: xoanmallon/check-christmas-lottery-numbers:{{ trimprefix .Tag "v" }}
+    image_templates:
+    - xoanmallon/check-christmas-lottery-numbers:{{ trimprefix .Tag "v" }}-amd64
+    - xoanmallon/check-christmas-lottery-numbers:{{ trimprefix .Tag "v" }}-arm64
+  - name_template: xoanmm/check-christmas-lottery-numbers:latest
+    image_templates:
+    - xoanmallon/check-christmas-lottery-numbers:{{ trimprefix .Tag "v" }}-amd64
+    - xoanmallon/check-christmas-lottery-numbers:{{ trimprefix .Tag "v" }}-arm64
+  - name_template: ghcr.io/xoanmm/check-christmas-lottery-numbers:{{ trimprefix .Tag "v" }}
+    image_templates:
+    - ghcr.io/xoanmm/check-christmas-lottery-numbers:{{ trimprefix .Tag "v" }}-amd64
+    - ghcr.io/xoanmm/check-christmas-lottery-numbers:{{ trimprefix .Tag "v" }}-arm64
+  - name_template: ghcr.io/xoanmm/check-christmas-lottery-numbers:latest
+    image_templates:
+    - ghcr.io/xoanmm/check-christmas-lottery-numbers:{{ trimprefix .Tag "v" }}-amd64
+    - ghcr.io/xoanmm/check-christmas-lottery-numbers:{{ trimprefix .Tag "v" }}-arm64
