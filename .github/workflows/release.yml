@@ -12,6 +12,10 @@ on:
     types:
       - completed
 
+permissions:
+  contents: write
+  packages: write
+
 jobs:
   semantic-release:
     if: "${{ github.event.workflow_run.conclusion == 'success' && !contains(github.event.commits[0].message, 'chore(release):') }}"
@@ -38,8 +42,8 @@ jobs:
         uses: actions/setup-go@v2
         with:
           go-version: 1.14
-
-      - name: Configure qemu
+      
+      - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
 
       - name: Set up Docker Buildx
@@ -109,7 +113,7 @@ jobs:
           version: v1.5.0
           args: release --rm-dist
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
 
       - name: Package helm chart with new version
         if: ${{ env.VERSION != '' }}
@@ -139,6 +143,10 @@ jobs:
         uses: actions/setup-go@v2
         with:
           go-version: 1.14
+
+      - name: Set Version ENV Variables
+        run: |
+          echo VERSION=${{ needs.semantic-release.outputs.version }} >> $GITHUB_ENV
       
       # Get release information to determine id of the current release
       - name: Get release info
