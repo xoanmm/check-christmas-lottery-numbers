@@ -7,7 +7,6 @@
 # check-christmas-lottery-numbers
 CLI to check the lottery numbers with the possibility to send notifications for the winning numbers using [PushOver](https://pushover.net/).
 
-
 This CLI has been created with the intention of providing a lottery number and through the API available to check the numbers of the draw to know if any of the numbers provided have been awarded.
 
 It must be taken into account that the CLI will check the status of the draw and in case it has not started yet it will not carry out the check of the numbers, showing a message like the following one:
