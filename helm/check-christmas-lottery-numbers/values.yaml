@@ -7,7 +7,7 @@ image:
   repository: ghcr.io/xoanmm/check-christmas-lottery-numbers
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
-  tag: 1.1.62
+  tag: 1.1.63
 imageCredentials:
   url: ""
   username: ""
