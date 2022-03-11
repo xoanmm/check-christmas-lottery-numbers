@@ -12,6 +12,7 @@ builds:
       - windows
     goarch:
       - amd64
+      - arm64
 
 changelog:
   sort: desc
@@ -60,7 +61,7 @@ dockers:
     dockerfile: Dockerfile
     use: buildx
     build_flag_templates:
-    - --platform=linux/arm64/v8
+    - --platform=linux/arm64
 docker_manifests:
   - name_template: xoanmallon/check-christmas-lottery-numbers:{{ trimprefix .Tag "v" }}
     image_templates:
