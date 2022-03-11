@@ -3,16 +3,17 @@ package results
 import (
 	"errors"
 	"fmt"
-	"github.com/google/go-cmp/cmp"
 	"log"
 	"os"
 	"testing"
+
+	"github.com/google/go-cmp/cmp"
 )
 
 const numberToUseForCheck = "74730"
 const correctLotteryDrawResultsAPIURL = "http://api.elpais.com/ws/LoteriaNavidadPremiados"
 const inCorrectLotteryDrawResultsAPIURLForJSONUnmarshall = "http://api.elpais.com/ws/LoteriaNavidadPremiadoss"
-const actualLotteryDrawStatusCode = 1
+const actualLotteryDrawStatusCode = 4
 const mongoCollectionForTests = "christmas"
 
 func TestMain(m *testing.M) {
