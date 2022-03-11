@@ -15,6 +15,7 @@ It must be taken into account that the CLI will check the status of the draw and
 2020/12/21 18:21:26 the draw has not started yet, it is not possible to get the results for the numbers
 ```
 
+
 ## Installation
 
 Go to [release page](https://github.com/xoanmm/check-christmas-lottery-numbers/releases) and download the binary you need.
