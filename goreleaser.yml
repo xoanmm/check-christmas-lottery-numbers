@@ -14,8 +14,8 @@ builds:
       - amd64
       - arm64
 
-# changelog:
-#   sort: desc
+ changelog:
+   sort: desc
 
 archives:
   - format_overrides:
