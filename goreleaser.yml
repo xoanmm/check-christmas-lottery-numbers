@@ -33,6 +33,12 @@ release:
   github:
     owner: xoanmm
     name: check-christmas-lottery-numbers
+  footer: |
+    ## Docker Images
+    - `xoanmallon/check-christmas-lottery-numbers:{{ trimprefix .Tag "v" }}`
+    - `xoanmallon/check-christmas-lottery-numbers:latest`
+    - `ghcr.io/xoanmm/check-christmas-lottery-numbers:{{ trimprefix .Tag "v" }}`
+    - `ghcr.io/xoanmm/check-christmas-lottery-numbers:latest`
 
 nfpms:
   - id: check-christmas-lottery-numbers
