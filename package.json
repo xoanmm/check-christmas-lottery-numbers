@@ -9,7 +9,7 @@
     "@semantic-release/git": "10.0.1",
     "@semantic-release/github": "8.0.2",
     "@semantic-release/release-notes-generator": "10.0.3",
-    "semantic-release": "18.0.1"
+    "semantic-release": "^19.0.2"
   },
   "release": {
     "branches": [
@@ -36,5 +36,8 @@
       ]
     ]
   },
-  "version": "1.1.18"
+  "version": "1.1.18",
+  "devDependencies": {
+    "minimist": "^1.2.5"
+  }
 }
