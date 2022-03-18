@@ -125,6 +125,12 @@ jobs:
         with:
           name: helm_package_${{ env.VERSION }}
           path: /tmp/check-christmas-lottery-numbers-${{ env.VERSION }}.tgz
+      
+      - name: Run chart-releaser
+        uses: helm/chart-releaser-action@v1.3.0
+        env:
+          CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          charts_dir: helm/check-christmas-lottery-numbers
     outputs:
       version: ${{ env.VERSION }}
 
