@@ -174,10 +174,9 @@ jobs:
       #     asset_name: check-christmas-lottery-numbers-${{ env.VERSION }}.tgz
       #     asset_content_type: application/gzip
 
-      # Publish helm chart in github pages
-      - name: Run chart-releaser
-        uses: helm/chart-releaser-action@v1.3.0
+      - name: Publish Helm charts
+        uses: stefanprodan/helm-gh-pages@master
         with:
-          charts_dir: helm/check-christmas-lottery-numbers
-        env:
-          CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          token: ${{ secrets.GITHUB_TOKEN }}
+          target_dir: helm/check-christmas-lottery-numbers
+          branch: main
