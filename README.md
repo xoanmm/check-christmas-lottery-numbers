@@ -269,3 +269,4 @@ A series of variables must be provided in order to carry out the execution of th
 
 [coverage-badge]: https://sonarcloud.io/api/project_badges/measure?project=xoanmm_check-christmas-lottery-numbers&metric=coverage
 [coverage-link]: https://sonarcloud.io/dashboard?id=xoanmm_check-christmas-lottery-numbers
+
