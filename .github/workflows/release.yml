@@ -178,5 +178,6 @@ jobs:
         uses: stefanprodan/helm-gh-pages@master
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          charts_dir: helm/check-christmas-lottery-numbers
           target_dir: helm/check-christmas-lottery-numbers
           branch: main
