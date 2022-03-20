@@ -104,7 +104,6 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-
       
       - name: Run GoReleaser
         if: ${{ env.VERSION != '' }}
@@ -179,10 +178,3 @@ jobs:
       #     asset_path: ./check-christmas-lottery-numbers-${{ env.VERSION }}.tgz
       #     asset_name: check-christmas-lottery-numbers-${{ env.VERSION }}.tgz
       #     asset_content_type: application/gzip
-
-      - name: Publish Helm charts
-        uses: stefanprodan/helm-gh-pages@master
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          charts_dir: helm
-          branch: main
