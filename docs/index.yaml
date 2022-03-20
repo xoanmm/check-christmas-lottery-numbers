@@ -1,0 +1,14 @@
+apiVersion: v1
+entries:
+  check-christmas-lottery-numbers:
+  - apiVersion: v2
+    appVersion: 1.1.79
+    created: "2022-03-20T10:30:28.039682517Z"
+    description: A Helm chart for Kubernetes
+    digest: 7a17baeff5721983c674fe952844601527362c447a32f2a029e380c608c748fe
+    name: check-christmas-lottery-numbers
+    type: application
+    urls:
+    - https://xoanmm.github.io/check-christmas-lottery-numbers/check-christmas-lottery-numbers-1.1.79.tgz
+    version: 1.1.79
+generated: "2022-03-20T10:30:28.039038406Z"
