@@ -130,7 +130,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           charts_dir: helm
-          branch: gh-pages
+          branch: main
           target_dir: docs
           linting: off
     outputs:
