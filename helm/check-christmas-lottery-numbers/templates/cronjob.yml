@@ -22,8 +22,7 @@ spec:
             - image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default "latest" }}"
               name: check-christmas-lottery-numbers
               {{- if eq .Values.config.notify "true" }}
-              command:
-                - "./check-christmas-lottery-numbers"
+              args:
                 - "-n"
                 - "-d={{ .Values.config.lotteryDraw }}"
                 {{- if and (eq .Values.config.notify "true") (eq .Values.config.storeNotifications "true")}}
